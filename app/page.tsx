@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 export default function Home() {
   return (
     <main className="font-mincho">
-      <Textarea placeholder="Jot anything down......" />
+      <Textarea className="h-screen text-9xl" placeholder="Jot anything down......" />
     </main>
   );
 }
