@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 import { Zen_Old_Mincho } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils"
 
-//const inter = Inter({ subsets: ["latin"] });
 const ZenOldMincho = Zen_Old_Mincho({
   weight: "400",
   subsets: ["latin"],
@@ -23,6 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <Toaster />
       <body className={cn(
         "min-h-screen bg-background font-sans antialiased",
         ZenOldMincho.variable
