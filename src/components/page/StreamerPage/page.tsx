@@ -1,23 +1,26 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useSockets } from "@/app/providers/socket";
 
 export const StreamerPage = () => {
     const { socket } = useSockets();
     const [inputValue, setInputValue] = useState("");
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // デバウンスされた関数を定義
     const sendToServer = useCallback(
         (message: string) => {
-            setTimeout(() => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+            timeoutRef.current = setTimeout(() => {
                 if (message) {
                     console.log(message);
-                    socket.emit("sendMessage", message);
+                    socket.emit("stream", message);
                 }
             }, 500);
         },
         [socket]
-    ); // 500ミリ秒のデバウンス時間
+    );
 
     // 入力値が変更された時に実行される関数
     const handleChange = useCallback(
