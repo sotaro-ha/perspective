@@ -11,7 +11,6 @@ interface SocketContextInterface {
 }
 
 const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8080";
-console.log(socketUrl);
 //SOCKET_URLの中身のところに接続を要求
 const socket = io(socketUrl);
 
