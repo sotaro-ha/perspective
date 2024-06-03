@@ -1,3 +1,4 @@
+"use client";
 import { Message } from "@/models/types";
 import { useContext, createContext, useState, Dispatch, SetStateAction } from "react";
 import io, { Socket } from "socket.io-client";
@@ -9,7 +10,8 @@ interface SocketContextInterface {
     setMessages: Dispatch<SetStateAction<Message[]>>;
 }
 
-const socketUrl = process.env.SOCKET_URL ?? "http://localhost:4000";
+const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8080";
+console.log(socketUrl);
 //SOCKET_URLの中身のところに接続を要求
 const socket = io(socketUrl);
 
