@@ -1,3 +1,3 @@
-import { StreamingPage } from "@/components/page/StreamingPage";
+import { StreamerPage } from "@/components/page/StreamerPage";
 
-export default StreamingPage;
+export default StreamerPage;

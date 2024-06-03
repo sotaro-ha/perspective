@@ -1,9 +1,8 @@
 "use client";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSockets } from "@/app/providers/socket";
-import { guardUndef } from "@/utils/guardUndef";
 
-export const StreamingPage = () => {
+export const StreamerPage = () => {
     const { socket } = useSockets();
     const [inputValue, setInputValue] = useState("");
 
