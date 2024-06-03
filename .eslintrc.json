@@ -1,3 +1,121 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+      "node": true,
+      "es6": true
+  },
+  "extends": ["eslint:recommended", "next/core-web-vitals"],
+  "plugins": ["import", "unused-imports", "return-type"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+      "project": "./tsconfig.json"
+  },
+  "ignorePatterns": [
+      "node_modules/*",
+      ".next/*",
+      ".out/*",
+      "!.prettierrc.js",
+      "src/generated/*",
+      "public/mockServiceWorker.js"
+  ],
+  "rules": {
+      // "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
+          "warn",
+          {
+              "vars": "all",
+              "varsIgnorePattern": "^_",
+              "args": "after-used",
+              "argsIgnorePattern": "^_"
+          }
+      ],
+      "return-type/enforce-access": [
+          "error",
+          { "typeNames": ["Err<\\w*Error>", "Promise<.*?Err<\\w*Error>.*?>"] }
+      ],
+
+      "import/order": [
+          "error",
+          {
+              "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+              ],
+              "pathGroups": [
+                  {
+                      "pattern": "@/mantine/**",
+                      "group": "builtin",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "@/libs/**",
+                      "group": "external",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "@/generated/**",
+                      "group": "external",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "@/model",
+                      "group": "internal",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "@/state",
+                      "group": "parent",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "@/service",
+                      "group": "sibling",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "@/components/**",
+                      "group": "index",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "@/styles",
+                      "group": "object",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "./components/**",
+                      "group": "type",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "./components",
+                      "group": "type",
+                      "position": "before"
+                  },
+                  {
+                      "pattern": "./**.css",
+                      "group": "type",
+                      "position": "after"
+                  },
+                  {
+                      "pattern": "./**.module.css",
+                      "group": "type",
+                      "position": "after"
+                  }
+              ],
+              "pathGroupsExcludedImportTypes": ["builtin"],
+              "newlines-between": "always",
+              "alphabetize": {
+                  "order": "asc",
+                  "caseInsensitive": true
+              }
+          }
+      ]
+  }
 }
