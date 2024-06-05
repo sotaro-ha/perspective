@@ -1,36 +1,28 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import { useSockets } from "@/app/providers/socket";
-import { guardUndef } from "@/utils/guardUndef";
+import { useReceiveService } from "@/service/receiver";
 
 export const ReceiverPage = () => {
-    const [message, setMessage] = useState<string>("");
-    const { socket } = useSockets();
+    const {
+        socket,
+        receivedText,
+        driver: { setUpSocket, shutDownSocket },
+    } = useReceiveService();
 
     useEffect(() => {
-        const handleConnect = () => {
-            console.log("Connected to WebSocket server");
-        };
-
-        const handleReceive = (receivedMessage: string) => {
-            setMessage(guardUndef(receivedMessage));
-        };
-
-        socket.on("connect", handleConnect);
-        socket.on("receive", handleReceive);
+        setUpSocket();
 
         return () => {
-            socket.off("connect", handleConnect);
-            socket.off("receive", handleReceive);
+            shutDownSocket();
         };
     }, [socket]);
 
     return (
         <div>
             <h1>Received Messages</h1>
-            {message}
+            {receivedText}
         </div>
     );
 };

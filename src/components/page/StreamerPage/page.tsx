@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
 
-import { useStreamService } from "@/service/stream";
-import { useClientInput } from "@/states/clientInput";
+import { useStreamService } from "@/service/streamer";
 
 export const StreamerPage = () => {
-    const { clientText } = useClientInput();
     const {
+        clientText,
         handler: { handleInputChange },
     } = useStreamService();
 
