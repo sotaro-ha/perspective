@@ -13,11 +13,8 @@ export const StreamerPage = () => {
                 clearTimeout(timeoutRef.current);
             }
             timeoutRef.current = setTimeout(() => {
-                if (message) {
-                    console.log(message);
-                    socket.emit("stream", message);
-                }
-            }, 500);
+                socket.emit("stream", message);
+            }, 50);
         },
         [socket]
     );
@@ -40,22 +37,6 @@ export const StreamerPage = () => {
                 onChange={handleChange}
                 placeholder="Write message"
             />
-            <Messages />
-        </>
-    );
-};
-
-const Messages = () => {
-    const { messages } = useSockets();
-    return (
-        <>
-            {messages && (
-                <div>
-                    {messages.map(({ message }, index) => {
-                        return <li key={index}>{message}</li>;
-                    })}
-                </div>
-            )}
         </>
     );
 };
