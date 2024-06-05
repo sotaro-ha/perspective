@@ -5,7 +5,7 @@ import { guardUndef } from "@/utils/guardUndef";
 import React, { useEffect, useState } from "react";
 
 export const ReceiverPage = () => {
-    const [messages, setMessages] = useState<string[]>([]);
+    const [message, setMessage] = useState<string>("");
     const { socket } = useSockets();
 
     useEffect(() => {
@@ -13,9 +13,8 @@ export const ReceiverPage = () => {
             console.log("Connected to WebSocket server");
         };
 
-        const handleReceive = (message: string) => {
-            console.log(message);
-            setMessages((prevMessages) => [...prevMessages, guardUndef(message)]);
+        const handleReceive = (receivedMessage: string) => {
+            setMessage(guardUndef(receivedMessage));
         };
 
         socket.on("connect", handleConnect);
@@ -30,11 +29,7 @@ export const ReceiverPage = () => {
     return (
         <div>
             <h1>Received Messages</h1>
-            <ul>
-                {messages.map((msg, index) => (
-                    <li key={index}>{msg}</li>
-                ))}
-            </ul>
+            {message}
         </div>
     );
 };
