@@ -17,7 +17,7 @@ export const StreamerPage = () => {
                     console.log(message);
                     socket.emit("stream", message);
                 }
-            }, 500);
+            }, 50);
         },
         [socket]
     );
