@@ -1,8 +1,9 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+
 import { useSockets } from "@/app/providers/socket";
 import { guardUndef } from "@/utils/guardUndef";
-import React, { useEffect, useState } from "react";
 
 export const ReceiverPage = () => {
     const [message, setMessage] = useState<string>("");
