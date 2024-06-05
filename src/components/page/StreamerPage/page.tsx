@@ -1,42 +1,20 @@
 "use client";
-import React, { useCallback, useRef, useState } from "react";
-import { useSockets } from "@/app/providers/socket";
+import React from "react";
+
+import { useStreamService } from "@/service/streamer";
 
 export const StreamerPage = () => {
-    const { socket } = useSockets();
-    const [inputValue, setInputValue] = useState("");
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-    const sendToServer = useCallback(
-        (message: string) => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-            timeoutRef.current = setTimeout(() => {
-                socket.emit("stream", message);
-            }, 50);
-        },
-        [socket]
-    );
-
-    // 入力値が変更された時に実行される関数
-    const handleChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-            const { value } = event.target;
-            setInputValue(value);
-            sendToServer(value);
-        },
-        [setInputValue, sendToServer]
-    );
+    const {
+        clientText,
+        handler: { handleInputChange },
+    } = useStreamService();
 
     return (
-        <>
-            <input
-                type="text"
-                value={inputValue}
-                onChange={handleChange}
-                placeholder="Write message"
-            />
-        </>
+        <input
+            type="text"
+            value={clientText}
+            onChange={handleInputChange}
+            placeholder="Write message"
+        />
     );
 };

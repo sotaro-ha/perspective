@@ -1,29 +1,29 @@
 "use client";
-import { Message } from "@/models/types";
 import { useContext, createContext, useState, Dispatch, SetStateAction } from "react";
 import io, { Socket } from "socket.io-client";
 
+import { Message } from "@/models/types";
+
 interface SocketContextInterface {
     socket: Socket;
-    setUsername: Dispatch<SetStateAction<Socket>>;
     messages?: Message[];
     setMessages: Dispatch<SetStateAction<Message[]>>;
 }
 
 const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8080";
 //SOCKET_URLの中身のところに接続を要求
-const socket = io(socketUrl);
 
 const SocketContext = createContext<SocketContextInterface>({
-    socket,
-    setUsername: () => false,
-    setMessages: () => false,
+    socket: io(socketUrl),
+    messages: [],
+    setMessages: () => null,
 });
 
-function SocketsProvider(props: any) {
-    const [messages, setMessages] = useState([]);
+function SocketsProvider(children: any) {
+    const [messages, setMessages] = useState<Message[]>([]);
+    const socket = io(socketUrl);
 
-    return <SocketContext.Provider value={{ socket, messages, setMessages }} {...props} />;
+    return <SocketContext.Provider value={{ socket, messages, setMessages }} {...children} />;
 }
 
 export const useSockets = () => useContext(SocketContext);
