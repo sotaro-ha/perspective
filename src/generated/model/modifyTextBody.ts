@@ -8,7 +8,7 @@
 
 export type ModifyTextBody = {
   /** ID of the window where the text is located. */
-  clientId?: string;
+  clientId: number;
   /** Text to be modified. */
   targetText: string;
   /** Index of the text to be modified. */
