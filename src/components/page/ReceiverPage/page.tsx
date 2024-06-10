@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 
-import { useReceiveService } from "@/service/receiver";
+import { useReceiveService } from "@/service/streaming/receiver";
 
 export const ReceiverPage = () => {
     const {

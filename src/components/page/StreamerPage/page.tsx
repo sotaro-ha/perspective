@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { useStreamService } from "@/service/streamer";
+import { useStreamService } from "@/service/streaming/streamer";
 
 export const StreamerPage = () => {
     const {
