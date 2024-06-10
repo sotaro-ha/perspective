@@ -16,7 +16,7 @@ paths:
             schema:
               type: object
               properties:
-                windowId:
+                clientId:
                   type: string
                   description: ID of the window where the text is located.
                 textIndex:

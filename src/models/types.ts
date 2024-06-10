@@ -1,5 +1,5 @@
 export type Message = {
     text: string;
-    username: string;
+    clientId: string;
     created_time: string;
 };
