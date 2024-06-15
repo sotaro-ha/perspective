@@ -5,7 +5,7 @@ info:
   description: API to receive text data and return modified text.
 
 paths:
-  /modify-text:
+  /mutate:
     post:
       summary: Modify a text
       operationId: modifyText

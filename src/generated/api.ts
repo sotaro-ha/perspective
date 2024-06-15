@@ -36,7 +36,7 @@ export const modifyText = (
  ): Promise<AxiosResponse<ModifyText200>> => {
     
     return axios.post(
-      `/modify-text`,
+      `/mutate`,
       modifyTextBody,options
     );
   }
