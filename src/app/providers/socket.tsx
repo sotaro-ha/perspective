@@ -10,7 +10,7 @@ interface SocketContextInterface {
     setDisplayText: Dispatch<SetStateAction<string>>;
 }
 
-const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8080";
+const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8081";
 //SOCKET_URLの中身のところに接続を要求
 
 const SocketContext = createContext<SocketContextInterface>({

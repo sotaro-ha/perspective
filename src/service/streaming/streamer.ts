@@ -32,14 +32,6 @@ export const useStreamService = () => {
             const { value: text } = event.target;
             updateText(text);
             sendToServer(text);
-            // sendToServer(text);
-            // 句読点と改行の数をカウント
-            const count = (text.match(/[.．。]/g) || []).length + (text.match(/\n/g) || []).length;
-
-            // 5回以上の場合は console.log を実行
-            if (count >= 5) {
-                console.log("句読点または改行が5回以上入力されました。");
-            }
         },
         [updateText, sendToServer]
     );
