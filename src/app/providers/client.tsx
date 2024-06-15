@@ -18,7 +18,7 @@ export default function ClientProvider({ children }: { children: React.ReactNode
     const [queryClient] = React.useState(() => new QueryClient());
     return (
         <QueryClientProvider client={queryClient}>
-            <SocketsProvider>{children}</SocketsProvider>;
+            <SocketsProvider>{children}</SocketsProvider>
         </QueryClientProvider>
     );
 }

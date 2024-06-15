@@ -26,5 +26,3 @@ export const ReceiverPage = () => {
         </div>
     );
 };
-
-export default ReceiverPage;

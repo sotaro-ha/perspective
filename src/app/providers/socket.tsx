@@ -1,5 +1,5 @@
 "use client";
-import { useContext, createContext, useState, Dispatch, SetStateAction } from "react";
+import React, { useContext, createContext, useState, Dispatch, SetStateAction } from "react";
 import io, { Socket } from "socket.io-client";
 
 interface SocketContextInterface {
@@ -21,7 +21,7 @@ const SocketContext = createContext<SocketContextInterface>({
     setDisplayText: () => null,
 });
 
-function SocketsProvider(children: any) {
+function SocketsProvider({ children }: { children: React.ReactNode }) {
     const [socketText, setSocketText] = useState<string>("");
     const [displayText, setDisplayText] = useState<string>("");
     const socket = io(socketUrl);
@@ -29,8 +29,9 @@ function SocketsProvider(children: any) {
     return (
         <SocketContext.Provider
             value={{ socket, socketText, setSocketText, displayText, setDisplayText }}
-            {...children}
-        />
+        >
+            {children}
+        </SocketContext.Provider>
     );
 }
 
