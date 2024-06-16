@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 "use client";
 import React, { useContext, createContext, useState, Dispatch, SetStateAction } from "react";
 import io, { Socket } from "socket.io-client";
 
 interface SocketContextInterface {
-    socket: Socket;
+    socket: Socket | null;
     socketText?: string;
     setSocketText: Dispatch<SetStateAction<string>>;
     displayText?: string;
@@ -12,9 +13,10 @@ interface SocketContextInterface {
 
 const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8081";
 //SOCKET_URLの中身のところに接続を要求
+const newSocket = io(socketUrl);
 
 const SocketContext = createContext<SocketContextInterface>({
-    socket: io(socketUrl),
+    socket: null,
     socketText: "",
     setSocketText: () => null,
     displayText: "",
@@ -24,11 +26,17 @@ const SocketContext = createContext<SocketContextInterface>({
 function SocketsProvider({ children }: { children: React.ReactNode }) {
     const [socketText, setSocketText] = useState<string>("");
     const [displayText, setDisplayText] = useState<string>("");
-    const socket = io(socketUrl);
+    const [socket, setSocket] = useState<Socket | null>(newSocket);
 
     return (
         <SocketContext.Provider
-            value={{ socket, socketText, setSocketText, displayText, setDisplayText }}
+            value={{
+                socket,
+                socketText,
+                setSocketText,
+                displayText,
+                setDisplayText,
+            }}
         >
             {children}
         </SocketContext.Provider>

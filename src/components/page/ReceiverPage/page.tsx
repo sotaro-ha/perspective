@@ -19,7 +19,7 @@ export const ReceiverPage = () => {
         return () => {
             shutDownSocket();
         };
-    }, [socket]);
+    }, [socket, setUpSocket, shutDownSocket]);
 
     useEffect(() => {
         const currentRef = receivedTextRef.current;

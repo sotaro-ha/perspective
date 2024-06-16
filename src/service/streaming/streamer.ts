@@ -6,6 +6,10 @@ export const useStreamService = () => {
     const { socket, socketText: clientText, setSocketText: setClientText } = useSockets();
     const timeoutRef = useRef<number | null>(null);
 
+    const test = useCallback(() => {
+        // console.log(socket);
+    }, [socket]);
+
     const updateText = useCallback(
         (text: string) => {
             setClientText(text);
@@ -37,6 +41,7 @@ export const useStreamService = () => {
     );
 
     return {
+        test,
         socket,
         clientText,
         handler: { handleInputChange },
