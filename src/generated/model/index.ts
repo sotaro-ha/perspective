@@ -7,6 +7,7 @@
  */
 
 export * from './modifyText200';
+export * from './modifyText200Result';
 export * from './modifyText400';
 export * from './modifyTextBody';
 export * from './modifyTextDefault';

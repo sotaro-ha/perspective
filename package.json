@@ -37,7 +37,8 @@
         "socket.io": "^4.7.5",
         "stylelint-config-standard-scss": "^13.1.0",
         "tailwind-merge": "^2.3.0",
-        "tailwindcss-animate": "^1.0.7"
+        "tailwindcss-animate": "^1.0.7",
+        "ts-pattern": "^5.1.2"
     },
     "devDependencies": {
         "@types/node": "^20.14.0",

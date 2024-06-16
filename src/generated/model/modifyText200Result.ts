@@ -5,8 +5,10 @@
  * API to receive text data and return modified text.
  * OpenAPI spec version: 1.0.0
  */
-import type { ModifyText200Result } from './modifyText200Result';
 
-export type ModifyText200 = {
-  result?: ModifyText200Result;
+export type ModifyText200Result = {
+  /** AI output from BE */
+  modifiedText?: string;
+  /** text index in the contents */
+  textIndex?: number;
 };

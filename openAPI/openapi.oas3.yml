@@ -5,7 +5,7 @@ info:
   description: API to receive text data and return modified text.
 
 paths:
-  /modify-text:
+  /mutate:
     post:
       summary: Modify a text
       operationId: modifyText
@@ -16,8 +16,8 @@ paths:
             schema:
               type: object
               properties:
-                windowId:
-                  type: string
+                clientId:
+                  type: integer
                   description: ID of the window where the text is located.
                 textIndex:
                   type: integer
@@ -26,7 +26,7 @@ paths:
                   type: string
                   description: Text to be modified.
               required:
-                - windowId
+                - clientId
                 - textIndex
                 - targetText
       responses:
@@ -73,3 +73,12 @@ paths:
                             error:
                                 type: string
                                 description: "A detailed error message."
+
+components:
+    securitySchemes:
+        ApiKeyAuth:
+            type: apiKey
+            in: header
+            name: X-Api-Key
+security:
+    - ApiKeyAuth: []
