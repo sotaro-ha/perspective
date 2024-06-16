@@ -22,6 +22,6 @@ export const sendTextToAI = (async ({
         const res = await modifyText(reqBody);
         return UsecaseResultOk(res);
     } catch (error) {
-        return UsecaseResultError(new Error("AI送信失敗"));
+        return UsecaseResultError(new Error(`AI送信失敗: ${error}`));
     }
 }) satisfies UsecaseMethod;
