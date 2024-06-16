@@ -8,9 +8,12 @@ import { textAreaStyle } from "./page.css";
 
 export const StreamerPage = () => {
     const {
+        test,
         clientText,
         handler: { handleInputChange },
     } = useStreamService();
+
+    test();
 
     return (
         <Textarea

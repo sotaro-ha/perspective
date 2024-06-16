@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 
 import { useSockets } from "@/app/providers/socket";
 import { guardUndef } from "@/utils/guardUndef";
@@ -9,25 +9,28 @@ export const useReceiveService = () => {
     const { socket, socketText: receivedText, setSocketText: setReceivedText } = useSockets();
     const receivedTextRef = useRef<HTMLDivElement>(null);
 
-    const handleConnect = () => {
+    const handleConnect = useCallback(() => {
         console.log("Connected to WebSocket server");
-    };
+    }, []);
 
-    const handleReceive = (text: string) => {
-        setReceivedText(guardUndef(text));
-    };
+    const handleReceive = useCallback(
+        (text: string) => {
+            setReceivedText(guardUndef(text));
+        },
+        [setReceivedText]
+    );
 
-    const setUpSocket = () => {
-        socket.on("connect", handleConnect);
-        socket.on("receive", handleReceive);
-    };
+    const setUpSocket = useCallback(() => {
+        guardUndef(socket).on("connect", handleConnect);
+        guardUndef(socket).on("receive", handleReceive);
+    }, [socket, handleReceive, handleConnect]);
 
-    const shutDownSocket = () => {
-        socket.off("connect", handleConnect);
-        socket.off("receive", handleReceive);
-    };
+    const shutDownSocket = useCallback(() => {
+        guardUndef(socket).off("connect", handleConnect);
+        guardUndef(socket).off("receive", handleReceive);
+    }, [socket, handleConnect, handleReceive]);
 
-    const handleInputChange = async () => {
+    const handleInputChange = useCallback(async () => {
         const text = guardUndef(receivedTextRef.current?.innerText);
         // 句読点と改行の数をカウント
         const count = (text.match(/[.．。]/g) || []).length + (text.match(/\n/g) || []).length;
@@ -38,7 +41,7 @@ export const useReceiveService = () => {
             const res = await sendTextToAI({ text: text, index: 0, id: 0 });
             console.log(res);
         }
-    };
+    }, [receivedTextRef]);
 
     return {
         socket,
