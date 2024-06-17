@@ -1,4 +1,5 @@
 import { useCallback, useRef } from "react";
+import { match } from "ts-pattern";
 
 import { useSockets } from "@/app/providers/socket";
 import { guardUndef } from "@/utils/guardUndef";
@@ -30,6 +31,13 @@ export const useReceiveService = () => {
         guardUndef(socket).off("receive", handleReceive);
     }, [socket, handleConnect, handleReceive]);
 
+    const updateText = useCallback(
+        (text: string) => {
+            setReceivedText(text);
+        },
+        [setReceivedText]
+    );
+
     const handleInputChange = useCallback(async () => {
         const text = guardUndef(receivedTextRef.current?.innerText);
         // 句読点と改行の数をカウント
@@ -39,9 +47,16 @@ export const useReceiveService = () => {
         if (count >= 5) {
             console.log("句読点または改行が5回以上入力されました。");
             const res = await sendTextToAI({ text: text, index: 0, id: 0 });
-            console.log(res);
+            match(res)
+                .with({ status: "ok" }, () => {
+                    const modifiedText = guardUndef(res.val?.data.result?.modifiedText);
+                    updateText(modifiedText);
+                })
+                .with({ status: "err" }, () => {
+                    console.log(res.err?.message);
+                });
         }
-    }, [receivedTextRef]);
+    }, [receivedTextRef, updateText]);
 
     return {
         socket,
