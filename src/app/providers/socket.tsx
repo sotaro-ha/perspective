@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 "use client";
-import React, { useContext, createContext, useState, Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
 interface SocketContextInterface {
-    socket: Socket | null;
+    socket: Socket;
     socketText?: string;
     setSocketText: Dispatch<SetStateAction<string>>;
     displayText?: string;
@@ -16,7 +16,7 @@ const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8081";
 const newSocket = io(socketUrl);
 
 const SocketContext = createContext<SocketContextInterface>({
-    socket: null,
+    socket: newSocket,
     socketText: "",
     setSocketText: () => null,
     displayText: "",
@@ -26,7 +26,7 @@ const SocketContext = createContext<SocketContextInterface>({
 function SocketsProvider({ children }: { children: React.ReactNode }) {
     const [socketText, setSocketText] = useState<string>("");
     const [displayText, setDisplayText] = useState<string>("");
-    const [socket, setSocket] = useState<Socket | null>(newSocket);
+    const [socket, setSocket] = useState<Socket>(newSocket);
 
     return (
         <SocketContext.Provider
