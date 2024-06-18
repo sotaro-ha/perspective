@@ -1,78 +1,79 @@
 openapi: 3.0.0
 info:
-  title: Text Modification API
-  version: 1.0.0
-  description: API to receive text data and return modified text.
+    title: Text Mutation API
+    version: 1.0.0
+    description: API to receive text data and return mutated text.
 
 paths:
-  /mutate:
-    post:
-      summary: Modify a text
-      operationId: modifyText
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                clientId:
-                  type: integer
-                  description: ID of the window where the text is located.
-                textIndex:
-                  type: integer
-                  description: Index of the text to be modified.
-                targetText:
-                  type: string
-                  description: Text to be modified.
-              required:
-                - clientId
-                - textIndex
-                - targetText
-      responses:
-        '200':
-          description: Successfully modified text
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  result:
-                    type: object
-                    properties:
-                      textIndex:
-                            type: integer
-                            description: text index in the contents
-                      modifiedText:
-                            type: string
-                            description: AI output from BE
-              example:
-                {
-                  result : {
-                    textIndex: 0,
-                    modifiedText: "今日は、まことに晴れわたる好天に恵まれた。\n夜明けとともに目覚めし私は、隣町の名高きパン屋にて、アールグレイ味のメロンパンを初めて購入してみた。\nその味わい、非常に絶品であったため、次なる機会には友人たちにも同じ喜びを分かち与えんと思う。\n自ら淹れたコーヒーと共に、優雅な朝時を過ごした後、研究の殿堂へと足を運んだ。\n長きにわたり雨続きであったが、今日は久々の晴天たり、故に馬車も自転車も用いず、徒歩で向かうことにした。\n途中、研究の同期と偶然にも出会い、懐かしい語らいを交わした。\n研究に取り組む意欲満ち溢れて出発したものの、やる気が起こらず、結局は同期と談笑の後、帰宅した。\n朝は良きスタートを切りつつも、その後は怠惰な一日となり、心苦しく思う次第である。\n",
-                  }
-                }  
-        "400":
-            description: Invalid request - the request could not be understood due to malformed syntax or invalid data.
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Invalid input data: image path missing"
-        default:
-            description: Unexpected error
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                description: "A detailed error message."
+    /mutate:
+        post:
+            summary: mutate a text
+            operationId: mutateText
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                clientId:
+                                    type: integer
+                                    description: ID of the window where the text is located.
+                                textIndex:
+                                    type: integer
+                                    description: Index of the text to be mutated.
+                                targetText:
+                                    type: string
+                                    description: Text to be mutated.
+                            required:
+                                - clientId
+                                - textIndex
+                                - targetText
+            responses:
+                "200":
+                    description: Successfully mutated text
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    result:
+                                        type: object
+                                        properties:
+                                            textIndex:
+                                                type: integer
+                                                description: text index in the contents
+                                            mutatedText:
+                                                type: string
+                                                description: AI output from BE
+                            example:
+                                {
+                                    result:
+                                        {
+                                            textIndex: 0,
+                                            mutatedText: "今日は、まことに晴れわたる好天に恵まれた。\n夜明けとともに目覚めし私は、隣町の名高きパン屋にて、アールグレイ味のメロンパンを初めて購入してみた。\nその味わい、非常に絶品であったため、次なる機会には友人たちにも同じ喜びを分かち与えんと思う。\n自ら淹れたコーヒーと共に、優雅な朝時を過ごした後、研究の殿堂へと足を運んだ。\n長きにわたり雨続きであったが、今日は久々の晴天たり、故に馬車も自転車も用いず、徒歩で向かうことにした。\n途中、研究の同期と偶然にも出会い、懐かしい語らいを交わした。\n研究に取り組む意欲満ち溢れて出発したものの、やる気が起こらず、結局は同期と談笑の後、帰宅した。\n朝は良きスタートを切りつつも、その後は怠惰な一日となり、心苦しく思う次第である。\n",
+                                        },
+                                }
+                "400":
+                    description: Invalid request - the request could not be understood due to malformed syntax or invalid data.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: "Invalid input data: image path missing"
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        description: "A detailed error message."
 
 components:
     securitySchemes:
