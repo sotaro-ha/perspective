@@ -1,25 +1,32 @@
 import { modifyText } from "@/generated/api";
 import { ModifyTextBody } from "@/generated/model";
 
-import { UsecaseResultError, UsecaseResultOk, UsecaseMethod } from "@/utils/result";
+import { useParams } from "next/navigation";
 
-export const sendTextToAI = (async ({
-    text,
-    index,
-    id,
-}: {
-    text: string;
-    index: number;
-    id: number;
-}) => {
+import { guardUndef } from "@/utils";
+import { UsecaseMethod, UsecaseResultError, UsecaseResultOk } from "@/utils/result";
+
+import { useTextMutation } from "./hooks";
+
+export const mutateText = (async (text: string) => {
+    const {
+        mutatedIndex,
+        mutator: { startMutation, finishMutation },
+    } = useTextMutation();
+    const params = useParams().toString();
+    const id = parseInt(params.split("/")[1], 10);
+
     const reqBody: ModifyTextBody = {
         targetText: text,
-        textIndex: index,
+        textIndex: mutatedIndex + 1,
         clientId: id,
     };
 
     try {
+        startMutation();
         const res = await modifyText(reqBody);
+        const mutatedText = guardUndef(res.data.result?.modifiedText);
+        finishMutation(mutatedText);
         return UsecaseResultOk(res);
     } catch (error) {
         return UsecaseResultError(new Error(`AI送信失敗: ${error}`));
