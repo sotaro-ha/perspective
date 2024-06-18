@@ -1,21 +1,11 @@
-import React, { useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 
 import { useSockets } from "@/app/providers/socket";
+import { guardUndef } from "@/utils";
 
 export const useStreamService = () => {
-    const { socket, socketText: clientText, setSocketText: setClientText } = useSockets();
+    const { socket } = useSockets();
     const timeoutRef = useRef<number | null>(null);
-
-    const test = useCallback(() => {
-        // console.log(socket);
-    }, [socket]);
-
-    const updateText = useCallback(
-        (text: string) => {
-            setClientText(text);
-        },
-        [setClientText]
-    );
 
     const sendToServer = useCallback(
         (message: string) => {
@@ -24,26 +14,14 @@ export const useStreamService = () => {
             }
             // NOTE: windowをつける https://zenn.dev/sa2knight/scraps/76480f90f97497
             timeoutRef.current = window.setTimeout(() => {
-                socket.emit("stream", message);
+                guardUndef(socket).emit("stream", message);
             }, 50);
         },
         [socket]
     );
 
-    // 入力値が変更された時に実行される関数
-    const handleInputChange = useCallback(
-        (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            const { value: text } = event.target;
-            updateText(text);
-            sendToServer(text);
-        },
-        [updateText, sendToServer]
-    );
-
     return {
-        test,
         socket,
-        clientText,
-        handler: { handleInputChange },
+        sendToServer,
     };
 };
