@@ -7,8 +7,6 @@ interface SocketContextInterface {
     socket: Socket;
     socketText?: string;
     setSocketText: Dispatch<SetStateAction<string>>;
-    displayText?: string;
-    setDisplayText: Dispatch<SetStateAction<string>>;
 }
 
 const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8081";
@@ -19,13 +17,10 @@ const SocketContext = createContext<SocketContextInterface>({
     socket: newSocket,
     socketText: "",
     setSocketText: () => null,
-    displayText: "",
-    setDisplayText: () => null,
 });
 
 function SocketsProvider({ children }: { children: React.ReactNode }) {
     const [socketText, setSocketText] = useState<string>("");
-    const [displayText, setDisplayText] = useState<string>("");
     const [socket, setSocket] = useState<Socket>(newSocket);
 
     return (
@@ -34,8 +29,6 @@ function SocketsProvider({ children }: { children: React.ReactNode }) {
                 socket,
                 socketText,
                 setSocketText,
-                displayText,
-                setDisplayText,
             }}
         >
             {children}
