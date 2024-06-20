@@ -8,7 +8,7 @@
 
 export type MutateText200Result = {
   /** AI output from BE */
-  mutatedText?: string;
+  mutatedText?: string[];
   /** text index in the contents */
   textIndex?: number;
 };

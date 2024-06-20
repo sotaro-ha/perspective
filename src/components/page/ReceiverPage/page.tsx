@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { useReceiveService } from "@/usecase/streaming/receiver";
+import { useReceiveService } from "@/usecase";
 
 import { useReceiver } from "./hooks";
 

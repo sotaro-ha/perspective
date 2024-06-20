@@ -1,25 +1,40 @@
 import { useCallback } from "react";
 
-import { useSockets } from "@/app/providers/socket";
+import { useMutationStates } from "@/states";
+import { useDiary } from "@/states/diary";
+import { useSocket } from "@/states/socket";
+import { convertText } from "@/utils";
 import { guardUndef } from "@/utils/guardUndef";
 
-import { useTextMutation } from "../mutation";
-
 export const useReceiveService = () => {
-    const { socket, socketText: receivedText, setSocketText: setReceivedText } = useSockets();
-    const { mutatedClientIndex, mutatedDisplayIndex } = useTextMutation();
+    const { socket } = useSocket();
+    const {
+        receiver: { receivedText, setReceivedText },
+    } = useDiary();
+    const {
+        mutatedLength,
+        mutator: { cancelMutation },
+    } = useMutationStates();
 
     const handleConnect = useCallback(() => {
         console.log("Connected to WebSocket server");
     }, []);
 
     const handleReceive = useCallback(
-        (text: string) => {
-            setReceivedText(
-                (prev) => prev.slice(0, mutatedDisplayIndex) + text.slice(mutatedClientIndex)
+        (value: string) => {
+            const text = convertText(value);
+
+            if (text.length <= mutatedLength) {
+                cancelMutation(text);
+            }
+
+            setReceivedText((prev) =>
+                text.length > mutatedLength
+                    ? [...prev.slice(0, mutatedLength), ...text.slice(mutatedLength)]
+                    : prev.slice(0, mutatedLength)
             );
         },
-        [setReceivedText, mutatedClientIndex, mutatedDisplayIndex]
+        [setReceivedText, mutatedLength, cancelMutation]
     );
 
     const setUpSocket = useCallback(() => {

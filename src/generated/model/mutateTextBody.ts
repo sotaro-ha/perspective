@@ -10,7 +10,7 @@ export type MutateTextBody = {
   /** ID of the window where the text is located. */
   clientId: number;
   /** Text to be mutated. */
-  targetText: string;
+  targetText: string[];
   /** Index of the text to be mutated. */
   textIndex: number;
 };

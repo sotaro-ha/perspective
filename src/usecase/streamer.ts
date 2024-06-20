@@ -1,9 +1,9 @@
 import { useCallback, useRef } from "react";
 
-import { useSockets } from "@/app/providers/socket";
+import { useSocket } from "@/states/socket";
 
 export const useStreamService = () => {
-    const { socket } = useSockets();
+    const { socket } = useSocket();
     const timeoutRef = useRef<number | null>(null);
 
     const sendToServer = useCallback(
