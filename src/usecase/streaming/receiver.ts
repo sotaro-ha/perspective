@@ -15,6 +15,7 @@ export const useReceiveService = () => {
 
     const handleReceive = useCallback(
         (text: string) => {
+            console.log(mutatedDisplayIndex, mutatedClientIndex);
             setReceivedText(
                 (prev) => prev.slice(0, mutatedDisplayIndex) + text.slice(mutatedClientIndex)
             );
