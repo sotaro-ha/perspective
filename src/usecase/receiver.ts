@@ -11,7 +11,10 @@ export const useReceiveService = () => {
     const {
         receiver: { receivedText, setReceivedText },
     } = useDiary();
-    const { mutatedClientIndex, mutatedDisplayIndex } = useMutationStates();
+    const {
+        mutatedLength,
+        mutator: { cancelMutation },
+    } = useMutationStates();
 
     const handleConnect = useCallback(() => {
         console.log("Connected to WebSocket server");
@@ -19,17 +22,19 @@ export const useReceiveService = () => {
 
     const handleReceive = useCallback(
         (value: string) => {
-            // if (text.length < mutatedClientIndex) {
-            //     cancelMutation(text, guardUndef(receivedText));
-            // }
             const text = convertText(value);
 
-            setReceivedText((prev) => [
-                ...prev.slice(0, mutatedDisplayIndex),
-                ...text.slice(mutatedClientIndex),
-            ]);
+            if (text.length <= mutatedLength) {
+                cancelMutation(text);
+            }
+
+            setReceivedText((prev) =>
+                text.length > mutatedLength
+                    ? [...prev.slice(0, mutatedLength), ...text.slice(mutatedLength)]
+                    : prev.slice(0, mutatedLength)
+            );
         },
-        [setReceivedText, mutatedClientIndex, mutatedDisplayIndex]
+        [setReceivedText, mutatedLength, cancelMutation]
     );
 
     const setUpSocket = useCallback(() => {

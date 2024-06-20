@@ -13,7 +13,7 @@ export const useReceiver = () => {
     } = useDiary();
     const {
         isMutating,
-        mutatedDisplayIndex,
+        mutatedLength,
         mutator: { startMutation, finishMutation },
     } = useMutationStates();
 
@@ -36,35 +36,31 @@ export const useReceiver = () => {
             match(res)
                 .with({ status: "ok" }, () => {
                     const mutatedText = guardUndef(res.val);
-                    console.log(mutatedDisplayIndex);
-                    const newDisplayText = [
-                        ...displayText.slice(0, mutatedDisplayIndex),
-                        ...mutatedText,
-                    ];
+                    const newDisplayText = [...displayText.slice(0, mutatedLength), ...mutatedText];
                     updateText(newDisplayText);
-                    finishMutation(targetText, mutatedText);
+                    finishMutation(mutatedText);
                 })
                 .with({ status: "err" }, () => {
                     console.log(res.err?.message);
-                    finishMutation(targetText, []);
+                    finishMutation([]);
                 });
         },
-        [startMutation, updateText, finishMutation, id, mutatedDisplayIndex]
+        [startMutation, updateText, finishMutation, id, mutatedLength]
     );
 
     const handleInputChange = useCallback(async () => {
         const value = guardUndef(receivedTextRef.current?.innerHTML);
         const text = convertText(value);
         // 句読点と改行の数をカウント
-        const targetText = text.slice(mutatedDisplayIndex);
+        const targetText = text.slice(mutatedLength);
         const count = targetText.length;
 
         // 5回以上の場合は mutation 実行
-        if (count >= 5 && !isMutating) {
+        if (count >= 6 && !isMutating) {
             console.log(`句点または改行が5回以上入力されました。: ${targetText}`);
             await mutateText(text, targetText);
         }
-    }, [isMutating, mutateText, mutatedDisplayIndex]);
+    }, [isMutating, mutateText, mutatedLength]);
 
     return {
         receivedTextRef,
