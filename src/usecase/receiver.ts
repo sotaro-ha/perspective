@@ -1,13 +1,12 @@
 import { useCallback } from "react";
 
 import { useSockets } from "@/app/providers/socket";
+import { useMutationStates } from "@/states";
 import { guardUndef } from "@/utils/guardUndef";
-
-import { useTextMutation } from "../mutation";
 
 export const useReceiveService = () => {
     const { socket, socketText: receivedText, setSocketText: setReceivedText } = useSockets();
-    const { mutatedClientIndex, mutatedDisplayIndex } = useTextMutation();
+    const { mutatedClientIndex, mutatedDisplayIndex } = useMutationStates();
 
     const handleConnect = useCallback(() => {
         console.log("Connected to WebSocket server");

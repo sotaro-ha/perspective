@@ -1,2 +1,3 @@
-export { sendTextToAI } from "./mutation";
-export { useReceiveService, useStreamService } from "./streaming";
+export { sendTextToAI } from "./mutator";
+export { useReceiveService } from "./receiver";
+export { useStreamService } from "./streamer";
