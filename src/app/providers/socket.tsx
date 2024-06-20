@@ -5,8 +5,8 @@ import io, { Socket } from "socket.io-client";
 
 interface SocketContextInterface {
     socket: Socket;
-    socketText?: string;
-    setSocketText: Dispatch<SetStateAction<string>>;
+    socketText?: string[];
+    setSocketText: Dispatch<SetStateAction<string[]>>;
 }
 
 const socketUrl = process.env.SOCKET_URL ?? "http://localhost:8081";
@@ -15,12 +15,12 @@ const newSocket = io(socketUrl);
 
 const SocketContext = createContext<SocketContextInterface>({
     socket: newSocket,
-    socketText: "",
+    socketText: [],
     setSocketText: () => null,
 });
 
 function SocketsProvider({ children }: { children: React.ReactNode }) {
-    const [socketText, setSocketText] = useState<string>("");
+    const [socketText, setSocketText] = useState<string[]>([]);
     const [socket, setSocket] = useState<Socket>(newSocket);
 
     return (

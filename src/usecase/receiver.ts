@@ -13,10 +13,15 @@ export const useReceiveService = () => {
     }, []);
 
     const handleReceive = useCallback(
-        (text: string) => {
-            setReceivedText(
-                (prev) => prev.slice(0, mutatedDisplayIndex) + text.slice(mutatedClientIndex)
-            );
+        (text: string[]) => {
+            // if (text.length < mutatedClientIndex) {
+            //     cancelMutation(text, guardUndef(receivedText));
+            // }
+
+            setReceivedText((prev) => [
+                ...prev.slice(0, mutatedDisplayIndex),
+                ...text.slice(mutatedClientIndex),
+            ]);
         },
         [setReceivedText, mutatedClientIndex, mutatedDisplayIndex]
     );

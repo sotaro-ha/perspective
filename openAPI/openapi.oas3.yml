@@ -23,7 +23,9 @@ paths:
                                     type: integer
                                     description: Index of the text to be mutated.
                                 targetText:
-                                    type: string
+                                    type: array
+                                    items:
+                                        type: string
                                     description: Text to be mutated.
                             required:
                                 - clientId
