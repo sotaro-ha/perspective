@@ -37,9 +37,7 @@ export const useReceiver = () => {
             match(res)
                 .with({ status: "ok" }, () => {
                     const mutatedText = guardUndef(res.val);
-                    console.log(mutatedDisplayIndex);
                     const displayText = text.slice(0, mutatedDisplayIndex) + mutatedText;
-                    console.log(displayText);
                     updateText(displayText);
                     finishMutation(targetText, mutatedText);
                 })
