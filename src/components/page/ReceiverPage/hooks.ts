@@ -2,13 +2,15 @@ import { useParams } from "next/navigation";
 import { useCallback, useRef } from "react";
 import { match } from "ts-pattern";
 
-import { useSockets } from "@/app/providers/socket";
 import { useMutationStates } from "@/states";
+import { useDiary } from "@/states/diary";
 import { sendTextToAI } from "@/usecase";
-import { guardUndef } from "@/utils";
+import { convertText, guardUndef } from "@/utils";
 
 export const useReceiver = () => {
-    const { socketText: receivedText, setSocketText: setReceivedText } = useSockets();
+    const {
+        receiver: { receivedText, setReceivedText },
+    } = useDiary();
     const {
         isMutating,
         mutatedDisplayIndex,
@@ -21,38 +23,41 @@ export const useReceiver = () => {
     const receivedTextRef = useRef<HTMLDivElement>(null);
 
     const updateText = useCallback(
-        (text: string) => {
+        (text: string[]) => {
             setReceivedText(text);
         },
         [setReceivedText]
     );
 
     const mutateText = useCallback(
-        async (displayText: string, targetText: string) => {
+        async (displayText: string[], targetText: string[]) => {
             startMutation();
             const res = await sendTextToAI(targetText, id);
             match(res)
                 .with({ status: "ok" }, () => {
                     const mutatedText = guardUndef(res.val);
                     console.log(mutatedDisplayIndex);
-                    const newDisplayText = displayText.slice(0, mutatedDisplayIndex) + mutatedText;
+                    const newDisplayText = [
+                        ...displayText.slice(0, mutatedDisplayIndex),
+                        ...mutatedText,
+                    ];
                     updateText(newDisplayText);
                     finishMutation(targetText, mutatedText);
                 })
                 .with({ status: "err" }, () => {
                     console.log(res.err?.message);
-                    finishMutation(targetText, "");
+                    finishMutation(targetText, []);
                 });
         },
         [startMutation, updateText, finishMutation, id, mutatedDisplayIndex]
     );
 
     const handleInputChange = useCallback(async () => {
-        const text = guardUndef(receivedTextRef.current?.innerHTML);
+        const value = guardUndef(receivedTextRef.current?.innerHTML);
+        const text = convertText(value);
         // 句読点と改行の数をカウント
         const targetText = text.slice(mutatedDisplayIndex);
-        const count =
-            (targetText.match(/[.．。]/g) || []).length + (targetText.match(/\n/g) || []).length;
+        const count = targetText.length;
 
         // 5回以上の場合は mutation 実行
         if (count >= 5 && !isMutating) {

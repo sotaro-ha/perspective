@@ -8,7 +8,7 @@ import {
     guardUndef,
 } from "@/utils";
 
-export const sendTextToAI = (async (text: string, id: number) => {
+export const sendTextToAI = (async (text: string[], id: number) => {
     const reqBody: MutateTextBody = {
         targetText: text,
         textIndex: 0, //FIXME: ここいらないかも

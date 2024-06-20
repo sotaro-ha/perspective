@@ -1,11 +1,13 @@
 import React, { useCallback } from "react";
 
-import { useSockets } from "@/app/providers/socket";
+import { useDiary } from "@/states/diary";
 import { useStreamService } from "@/usecase";
 
 export const useStream = () => {
     const { sendToServer } = useStreamService();
-    const { socketText: clientText, setSocketText: setClientText } = useSockets();
+    const {
+        client: { clientText, setClientText },
+    } = useDiary();
 
     const updateText = useCallback(
         (text: string) => {

@@ -6,8 +6,6 @@ import React from "react";
 
 import { getBaseUrl } from "@/utils";
 
-import SocketsProvider from "./socket";
-
 const store = createStore();
 
 export default function ClientProvider({ children }: { children: React.ReactNode }) {
@@ -22,9 +20,7 @@ export default function ClientProvider({ children }: { children: React.ReactNode
     const [queryClient] = React.useState(() => new QueryClient());
     return (
         <QueryClientProvider client={queryClient}>
-            <SocketsProvider>
-                <Provider store={store}>{children}</Provider>
-            </SocketsProvider>
+            <Provider store={store}>{children}</Provider>
         </QueryClientProvider>
     );
 }

@@ -1,11 +1,16 @@
 import { useCallback } from "react";
 
-import { useSockets } from "@/app/providers/socket";
 import { useMutationStates } from "@/states";
+import { useDiary } from "@/states/diary";
+import { useSocket } from "@/states/socket";
+import { convertText } from "@/utils";
 import { guardUndef } from "@/utils/guardUndef";
 
 export const useReceiveService = () => {
-    const { socket, socketText: receivedText, setSocketText: setReceivedText } = useSockets();
+    const { socket } = useSocket();
+    const {
+        receiver: { receivedText, setReceivedText },
+    } = useDiary();
     const { mutatedClientIndex, mutatedDisplayIndex } = useMutationStates();
 
     const handleConnect = useCallback(() => {
@@ -13,10 +18,11 @@ export const useReceiveService = () => {
     }, []);
 
     const handleReceive = useCallback(
-        (text: string[]) => {
+        (value: string) => {
             // if (text.length < mutatedClientIndex) {
             //     cancelMutation(text, guardUndef(receivedText));
             // }
+            const text = convertText(value);
 
             setReceivedText((prev) => [
                 ...prev.slice(0, mutatedDisplayIndex),
