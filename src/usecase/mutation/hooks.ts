@@ -1,5 +1,6 @@
+import { atom, useAtom } from "jotai";
 import { useParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 import {
     ResultError as UsecaseError,
@@ -9,10 +10,16 @@ import {
 
 import { sendTextToAI } from ".";
 
+// Atom definitions
+const mutatedDisplayIndexAtom = atom<number>(0);
+const mutatedClientIndexAtom = atom<number>(0);
+const isMutatingAtom = atom<boolean>(false);
+
+// Hook to use these atoms
 export const useTextMutation = () => {
-    const [mutatedDisplayIndex, setMutatedDisplayIndex] = useState<number>(0);
-    const [mutatedClientIndex, setMutatedClientIndex] = useState<number>(0);
-    const [isMutating, setIsMutating] = useState<boolean>(false);
+    const [mutatedDisplayIndex, setMutatedDisplayIndex] = useAtom(mutatedDisplayIndexAtom);
+    const [mutatedClientIndex, setMutatedClientIndex] = useAtom(mutatedClientIndexAtom);
+    const [isMutating, setIsMutating] = useAtom(isMutatingAtom);
 
     const startMutation = useCallback(() => {
         setIsMutating(true);
