@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import { useSockets } from "@/app/providers/socket";
 
-import { useStreamService } from "@/service";
+import { useStreamService } from "@/usecase";
 
 export const useStream = () => {
     const { sendToServer } = useStreamService();

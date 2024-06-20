@@ -1,17 +1,22 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
-import { useReceiveService } from "@/service/streaming/receiver";
+import { useReceiveService } from "@/usecase/streaming/receiver";
+
+import { useReceiver } from "./hooks";
 
 export const ReceiverPage = () => {
     const {
         socket,
-        receivedTextRef,
         receivedText,
         driver: { setUpSocket, shutDownSocket },
-        handler: { handleInputChange },
     } = useReceiveService();
+
+    const {
+        receivedTextRef,
+        handler: { handleInputChange },
+    } = useReceiver();
 
     useEffect(() => {
         setUpSocket();

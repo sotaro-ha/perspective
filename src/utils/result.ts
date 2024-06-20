@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable unused-imports/no-unused-vars */
-export type UsecaseResult<T, E extends Error | null> = Ok<T> | Err<E>;
+export type Result<T, E extends Error | null> = Ok<T> | Err<E>;
 
 type Ok<T> = {
     readonly status: "ok";
@@ -14,18 +14,18 @@ type Err<E extends Error | null> = {
     readonly err: E;
 };
 
-export const UsecaseResultOk = <T>(val: T): Ok<T> => ({
+export const ResultOk = <T>(val: T): Ok<T> => ({
     status: "ok",
     val,
     err: null,
 });
 
-export const UsecaseResultError = <E extends Error | null>(err: E): Err<E> => ({
+export const ResultError = <E extends Error | null>(err: E): Err<E> => ({
     status: "err",
     val: null,
     err,
 });
 
-export type UsecaseMethod = (
+export type ResultMethod = (
     ...args: any[]
-) => UsecaseResult<unknown, Error | null> | Promise<UsecaseResult<unknown, Error | null>>;
+) => Result<unknown, Error | null> | Promise<Result<unknown, Error | null>>;
