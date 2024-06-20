@@ -5697,6 +5697,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jotai@npm:^2.8.3":
+  version: 2.8.3
+  resolution: "jotai@npm:2.8.3"
+  peerDependencies:
+    "@types/react": ">=17.0.0"
+    react: ">=17.0.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    react:
+      optional: true
+  checksum: b4e149804d190a0262348498b5552cd16ee5f7ffa65804914e5786e1ba204e7bfcf0d77e8260461057ea0f926fc3e49bc997a6d8659e441c9cffa8d5639317a5
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -7183,6 +7198,7 @@ __metadata:
     eslint-config-next: 14.2.3
     eslint-plugin-return-type: latest
     eslint-plugin-unused-imports: latest
+    jotai: ^2.8.3
     leva: ^0.9.35
     lodash: ^4.17.21
     lucide-react: ^0.378.0

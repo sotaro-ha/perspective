@@ -1,11 +1,15 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
+import { Provider, createStore } from "jotai";
 import React from "react";
 
 import { getBaseUrl } from "@/utils";
 
 import SocketsProvider from "./socket";
+
+const store = createStore();
+
 export default function ClientProvider({ children }: { children: React.ReactNode }) {
     const baseUrl = getBaseUrl();
 
@@ -18,7 +22,9 @@ export default function ClientProvider({ children }: { children: React.ReactNode
     const [queryClient] = React.useState(() => new QueryClient());
     return (
         <QueryClientProvider client={queryClient}>
-            <SocketsProvider>{children}</SocketsProvider>
+            <SocketsProvider>
+                <Provider store={store}>{children}</Provider>
+            </SocketsProvider>
         </QueryClientProvider>
     );
 }

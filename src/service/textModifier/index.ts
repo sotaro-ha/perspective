@@ -1,1 +1,0 @@
-export { sendTextToAI } from "./usecase";
