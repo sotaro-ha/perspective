@@ -24,20 +24,19 @@ export const useReceiver = () => {
 
     const updateText = useCallback(
         (text: string[]) => {
-            setReceivedText(text);
+            setReceivedText((prevText) => [...prevText.slice(0, mutatedLength), ...text]);
         },
-        [setReceivedText]
+        [setReceivedText, mutatedLength]
     );
 
     const mutateText = useCallback(
-        async (displayText: string[], targetText: string[]) => {
+        async (targetText: string[]) => {
             startMutation();
             const res = await sendTextToAI(targetText, id);
             match(res)
                 .with({ status: "ok" }, () => {
                     const mutatedText = guardUndef(res.val);
-                    const newDisplayText = [...displayText.slice(0, mutatedLength), ...mutatedText];
-                    updateText(newDisplayText);
+                    updateText(mutatedText);
                     finishMutation(mutatedText);
                 })
                 .with({ status: "err" }, () => {
@@ -45,7 +44,7 @@ export const useReceiver = () => {
                     finishMutation([]);
                 });
         },
-        [startMutation, updateText, finishMutation, id, mutatedLength]
+        [startMutation, updateText, finishMutation, id]
     );
 
     const handleInputChange = useCallback(async () => {
@@ -58,7 +57,7 @@ export const useReceiver = () => {
         // 5回以上の場合は mutation 実行
         if (count >= 6 && !isMutating) {
             console.log(`句点または改行が5回以上入力されました。: ${targetText}`);
-            await mutateText(text, targetText);
+            await mutateText(targetText);
         }
     }, [isMutating, mutateText, mutatedLength]);
 
