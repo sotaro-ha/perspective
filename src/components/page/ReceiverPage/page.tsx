@@ -29,12 +29,12 @@ export const ReceiverPage = () => {
     useEffect(() => {
         const currentRef = receivedTextRef.current;
         if (currentRef) {
-            currentRef.addEventListener("DOMSubtreeModified", handleInputChange);
+            currentRef.addEventListener("MutationObserver", handleInputChange);
         }
 
         return () => {
             if (currentRef) {
-                currentRef.removeEventListener("DOMSubtreeModified", handleInputChange);
+                currentRef.removeEventListener("MutationObserver", handleInputChange);
             }
         };
     }, [receivedTextRef, handleInputChange]);
