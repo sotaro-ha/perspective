@@ -28,10 +28,11 @@ export const useReceiveService = () => {
                 cancelMutation(text);
             }
 
+            console.log(text, mutatedLength);
             setReceivedText((prev) =>
                 text.length > mutatedLength
                     ? [...prev.slice(0, mutatedLength), ...text.slice(mutatedLength)]
-                    : prev.slice(0, mutatedLength)
+                    : prev.slice(0, text.length - 1)
             );
         },
         [setReceivedText, mutatedLength, cancelMutation]
