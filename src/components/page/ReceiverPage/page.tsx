@@ -28,13 +28,19 @@ export const ReceiverPage = () => {
 
     useEffect(() => {
         const currentRef = receivedTextRef.current;
+        const observer = new MutationObserver(handleInputChange);
+
         if (currentRef) {
-            currentRef.addEventListener("MutationObserver", handleInputChange);
+            observer.observe(currentRef, {
+                childList: true,
+                subtree: true,
+                characterData: true,
+            });
         }
 
         return () => {
             if (currentRef) {
-                currentRef.removeEventListener("MutationObserver", handleInputChange);
+                observer.disconnect();
             }
         };
     }, [receivedTextRef, handleInputChange]);
