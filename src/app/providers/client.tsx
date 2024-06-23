@@ -13,7 +13,7 @@ export default function ClientProvider({ children }: { children: React.ReactNode
 
     axios.defaults.baseURL = baseUrl;
 
-    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+    const apiKey = process.env.API_KEY;
     if (apiKey) {
         axios.defaults.headers.common["x-api-key"] = apiKey;
     }
