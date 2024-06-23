@@ -27,23 +27,8 @@ export const ReceiverPage = () => {
     }, [socket, setUpSocket, shutDownSocket]);
 
     useEffect(() => {
-        const currentRef = receivedTextRef.current;
-        const observer = new MutationObserver(handleInputChange);
-
-        if (currentRef) {
-            observer.observe(currentRef, {
-                childList: true,
-                subtree: true,
-                characterData: true,
-            });
-        }
-
-        return () => {
-            if (currentRef) {
-                observer.disconnect();
-            }
-        };
-    }, [receivedTextRef, handleInputChange]);
+        handleInputChange();
+    }, [receivedText]);
 
     return (
         <div>

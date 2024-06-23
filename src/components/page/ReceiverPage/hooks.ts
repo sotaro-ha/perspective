@@ -14,6 +14,7 @@ export const useReceiver = () => {
     const {
         isMutating,
         mutatedLength,
+        targetText,
         mutator: { startMutation, finishMutation },
     } = useMutationStates();
 
@@ -23,10 +24,10 @@ export const useReceiver = () => {
     const receivedTextRef = useRef<HTMLDivElement>(null);
 
     const updateText = useCallback(
-        (text: string[]) => {
-            setReceivedText((prevText) => [...prevText.slice(0, mutatedLength), ...text]);
+        (mutatedText: string[]) => {
+            setReceivedText((prevText) => [...mutatedText, ...prevText.slice(mutatedText.length)]);
         },
-        [setReceivedText, mutatedLength]
+        [setReceivedText]
     );
 
     const mutateText = useCallback(
@@ -51,15 +52,15 @@ export const useReceiver = () => {
         const value = guardUndef(receivedTextRef.current?.innerHTML);
         const text = convertText(value);
         // 句読点と改行の数をカウント
-        const targetText = text.slice(mutatedLength);
-        const count = targetText.length;
+        const checkTarget = text.slice(mutatedLength);
+        const count = checkTarget.length;
 
         // 5回以上の場合は mutation 実行
-        if (count >= 6 && !isMutating) {
+        if (count === 6 && !isMutating) {
             console.log(`句点または改行が5回以上入力されました。: ${targetText}`);
-            await mutateText(targetText);
+            await mutateText(targetText.slice(0, mutatedLength + count));
         }
-    }, [isMutating, mutateText, mutatedLength]);
+    }, [isMutating, targetText, mutateText, mutatedLength]);
 
     return {
         receivedTextRef,

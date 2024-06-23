@@ -17,6 +17,7 @@ export const sendTextToAI = (async (text: string[], id: number) => {
 
     try {
         const res = await mutateText(reqBody);
+        console.log(res);
         const mutatedText = res.data.result?.mutatedText;
         return UsecaseOk(guardUndef(mutatedText));
     } catch (error) {
