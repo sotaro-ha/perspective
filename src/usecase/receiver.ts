@@ -13,7 +13,7 @@ export const useReceiveService = () => {
     } = useDiary();
     const {
         mutatedLength,
-        mutator: { cancelMutation },
+        mutator: { cancelMutation, setTargetText },
     } = useMutationStates();
 
     const handleConnect = useCallback(() => {
@@ -24,18 +24,18 @@ export const useReceiveService = () => {
         (value: string) => {
             const text = convertText(value);
 
-            if (text.length <= mutatedLength) {
+            if (text.length < mutatedLength) {
                 cancelMutation(text);
             }
 
-            console.log(text, mutatedLength);
             setReceivedText((prev) =>
                 text.length > mutatedLength
                     ? [...prev.slice(0, mutatedLength), ...text.slice(mutatedLength)]
                     : prev.slice(0, text.length - 1)
             );
+            setTargetText(text);
         },
-        [setReceivedText, mutatedLength, cancelMutation]
+        [setReceivedText, mutatedLength, cancelMutation, setTargetText]
     );
 
     const setUpSocket = useCallback(() => {
