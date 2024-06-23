@@ -56,9 +56,9 @@ export const useReceiver = () => {
         const count = checkTarget.length;
 
         // 5回以上の場合は mutation 実行
-        if (count === 5 && !isMutating) {
+        if (count === 6 && !isMutating) {
             console.log(`句点または改行が5回以上入力されました。: ${targetText}`);
-            await mutateText(targetText);
+            await mutateText(targetText.slice(0, mutatedLength + count));
         }
     }, [isMutating, targetText, mutateText, mutatedLength]);
 

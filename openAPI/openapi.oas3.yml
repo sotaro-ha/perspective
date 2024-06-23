@@ -5,7 +5,7 @@ info:
     description: API to receive text data and return mutated text.
 
 paths:
-    /mutate:
+    /mutate3:
         post:
             summary: mutate a text
             operationId: mutateText
