@@ -7,6 +7,8 @@ import { useDiary } from "@/states/diary";
 import { sendTextToAI } from "@/usecase";
 import { convertText, guardUndef } from "@/utils";
 
+const FETCH_COUNT = 5;
+
 export const useReceiver = () => {
     const {
         receiver: { receivedText, setReceivedText },
@@ -56,9 +58,9 @@ export const useReceiver = () => {
         const count = checkTarget.length;
 
         // 5回以上の場合は mutation 実行
-        if (count === 6 && !isMutating) {
+        if (count === FETCH_COUNT + 1 && !isMutating) {
             console.log(`句点または改行が5回以上入力されました。: ${targetText}`);
-            await mutateText(targetText.slice(0, mutatedLength + count));
+            await mutateText(targetText.slice(0, mutatedLength + FETCH_COUNT));
         }
     }, [isMutating, targetText, mutateText, mutatedLength]);
 
