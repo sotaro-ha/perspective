@@ -10,7 +10,9 @@ export function getBaseUrl() {
         )
         .when(
             ([, enableApiMock]) => enableApiMock === "true",
-            () => guardUndef(process.env.NEXT_PUBLIC_API_URL_MOCK)
+            () =>
+                guardUndef(process.env.NEXT_PUBLIC_HOST_LOCAL) +
+                guardUndef(process.env.NEXT_PUBLIC_MOCK_PORT)
         )
         .when(
             ([, enableApiMock]) => enableApiMock === "false",

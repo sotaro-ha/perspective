@@ -1,11 +1,13 @@
 import { useParams } from "next/navigation";
-import { useCallback, useRef } from "react";
+import { MutableRefObject, useCallback, useRef } from "react";
 import { match } from "ts-pattern";
 
 import { useMutationStates } from "@/states";
 import { useDiary } from "@/states/diary";
 import { sendTextToAI } from "@/usecase";
 import { convertText, guardUndef } from "@/utils";
+
+const FETCH_COUNT = 5;
 
 export const useReceiver = () => {
     const {
@@ -48,19 +50,25 @@ export const useReceiver = () => {
         [startMutation, updateText, finishMutation, id]
     );
 
-    const handleInputChange = useCallback(async () => {
-        const value = guardUndef(receivedTextRef.current?.innerHTML);
-        const text = convertText(value);
-        // 句読点と改行の数をカウント
-        const checkTarget = text.slice(mutatedLength);
-        const count = checkTarget.length;
+    const handleInputChange = useCallback(
+        async (textRef: MutableRefObject<string>) => {
+            const value = guardUndef(textRef.current);
+            const text = convertText(value);
+            // 句読点と改行の数をカウント
+            const checkTarget = text.slice(mutatedLength);
+            console.log(checkTarget, mutatedLength);
+            const count = checkTarget.length;
 
-        // 5回以上の場合は mutation 実行
-        if (count === 6 && !isMutating) {
-            console.log(`句点または改行が5回以上入力されました。: ${targetText}`);
-            await mutateText(targetText.slice(0, mutatedLength + count));
-        }
-    }, [isMutating, targetText, mutateText, mutatedLength]);
+            // 5回以上の場合は mutation 実行
+            if (count > FETCH_COUNT && !isMutating) {
+                console.log(
+                    `句点または改行が5回以上入力されました。: ${targetText.slice(0, mutatedLength + FETCH_COUNT)}`
+                );
+                await mutateText(targetText.slice(0, mutatedLength + FETCH_COUNT));
+            }
+        },
+        [isMutating, targetText, mutateText, mutatedLength]
+    );
 
     return {
         receivedTextRef,

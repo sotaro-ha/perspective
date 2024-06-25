@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { MutableRefObject, useCallback } from "react";
 
 import { useMutationStates } from "@/states";
 import { useDiary } from "@/states/diary";
@@ -6,7 +6,7 @@ import { useSocket } from "@/states/socket";
 import { convertText } from "@/utils";
 import { guardUndef } from "@/utils/guardUndef";
 
-export const useReceiveService = () => {
+export const useReceiveService = (clientTextRef: MutableRefObject<string>) => {
     const { socket } = useSocket();
     const {
         receiver: { receivedText, setReceivedText },
@@ -33,9 +33,10 @@ export const useReceiveService = () => {
                     ? [...prev.slice(0, mutatedLength), ...text.slice(mutatedLength)]
                     : prev.slice(0, text.length - 1)
             );
+            clientTextRef.current = value;
             setTargetText(text);
         },
-        [setReceivedText, mutatedLength, cancelMutation, setTargetText]
+        [setReceivedText, mutatedLength, cancelMutation, setTargetText, clientTextRef]
     );
 
     const setUpSocket = useCallback(() => {

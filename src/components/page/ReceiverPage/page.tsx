@@ -1,20 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useReceiveService } from "@/usecase";
 
 import { useReceiver } from "./hooks";
 
 export const ReceiverPage = () => {
+    const clientTextRef = useRef<string>("");
     const {
         socket,
         receivedText,
         driver: { setUpSocket, shutDownSocket },
-    } = useReceiveService();
+    } = useReceiveService(clientTextRef);
 
     const {
-        receivedTextRef,
         handler: { handleInputChange },
     } = useReceiver();
 
@@ -27,13 +27,13 @@ export const ReceiverPage = () => {
     }, [socket, setUpSocket, shutDownSocket]);
 
     useEffect(() => {
-        handleInputChange();
-    }, [receivedText]);
+        handleInputChange(clientTextRef);
+    }, [receivedText, clientTextRef]);
 
     return (
         <div>
             <h1>Received Messages</h1>
-            <div ref={receivedTextRef}>{receivedText}</div>
+            <div>{receivedText}</div>
         </div>
     );
 };
