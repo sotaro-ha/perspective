@@ -45,11 +45,11 @@ ping 192.168.0.105
 
 3. 各デバイスでクライアントサーバに接続
    デバイスごとの接続先は以下になります．
-
-    > windows : http://192.168.0.105:3000
-    > raspberry pi 1: http://192.168.0.105:3001/receiver/0
-    > raspberry pi 2: http://192.168.0.105:3002/receiver/1
-    > raspberry pi 3: http://192.168.0.105:3003/receiver/2
-    > raspberry pi 4: http://192.168.0.105:3004/receiver/3
+   
+    > windows : http://192.168.0.105:3000  
+    > raspberry pi 1: http://192.168.0.105:3001/receiver/0  
+    > raspberry pi 2: http://192.168.0.105:3002/receiver/1  
+    > raspberry pi 3: http://192.168.0.105:3003/receiver/2  
+    > raspberry pi 4: http://192.168.0.105:3004/receiver/3  
 
 4. windows PCから日記入力 -> 出力確認
