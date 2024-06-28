@@ -5,12 +5,10 @@ import { useCallback } from "react";
 
 const mutatedLengthAtom = atom<number>(0);
 const isMutatingAtom = atom<boolean>(false);
-const targetTextAtom = atom<string[]>([]);
 
 export const useMutationStates = () => {
     const [mutatedLength, setMutatedLength] = useAtom(mutatedLengthAtom);
     const [isMutating, setIsMutating] = useAtom(isMutatingAtom);
-    const [targetText, setTargetText] = useAtom(targetTextAtom);
 
     const startMutation = useCallback(() => {
         setIsMutating(true);
@@ -18,7 +16,7 @@ export const useMutationStates = () => {
 
     const finishMutation = useCallback(
         (mutatedText: string[]) => {
-            setMutatedLength(mutatedText.length);
+            setMutatedLength((prev) => prev + mutatedText.length);
             setIsMutating(false);
         },
         [setIsMutating, setMutatedLength]
@@ -26,7 +24,8 @@ export const useMutationStates = () => {
 
     const cancelMutation = useCallback(
         (clientText: string[]) => {
-            setMutatedLength(clientText.length - 1);
+            console.log(clientText);
+            setMutatedLength(clientText.length);
         },
         [setMutatedLength]
     );
@@ -34,12 +33,10 @@ export const useMutationStates = () => {
     return {
         mutatedLength,
         isMutating,
-        targetText,
         mutator: {
             startMutation,
             finishMutation,
             cancelMutation,
-            setTargetText,
         },
     };
 };

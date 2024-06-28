@@ -13,7 +13,7 @@ export const useReceiveService = (clientTextRef: MutableRefObject<string>) => {
     } = useDiary();
     const {
         mutatedLength,
-        mutator: { cancelMutation, setTargetText },
+        mutator: { cancelMutation },
     } = useMutationStates();
 
     const handleConnect = useCallback(() => {
@@ -34,9 +34,8 @@ export const useReceiveService = (clientTextRef: MutableRefObject<string>) => {
                     : prev.slice(0, text.length - 1)
             );
             clientTextRef.current = value;
-            setTargetText(text);
         },
-        [setReceivedText, mutatedLength, cancelMutation, setTargetText, clientTextRef]
+        [setReceivedText, mutatedLength, cancelMutation, clientTextRef]
     );
 
     const setUpSocket = useCallback(() => {
