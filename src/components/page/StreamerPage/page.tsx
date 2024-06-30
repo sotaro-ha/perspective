@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 
 import { useStreamer } from "./hooks";
 
-import EndModal from "./components/EndModal/EndModal";
-import StartModal from "./components/StartModal/StartModal";
+import { EndModal, StartModal } from "./components";
 
 import { textAreaStyle } from "./page.css";
 
