@@ -4,9 +4,10 @@
 import { Button, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 
-import EndModal from "./EndModal";
 import { useStreamer } from "./hooks";
-import StartModal from "./StartModal";
+
+import EndModal from "./components/EndModal/EndModal";
+import StartModal from "./components/StartModal/StartModal";
 
 import { textAreaStyle } from "./page.css";
 
@@ -74,11 +75,7 @@ export const StreamerPage = () => {
 
     return (
         <>
-            <StartModal
-                isOpen={isStartModalOpen}
-                onClose={() => setIsStartModalOpen(false)}
-                onSelect={handleStartSelect}
-            />
+            <StartModal onClose={() => setIsStartModalOpen(false)} onSelect={handleStartSelect} />
             <EndModal isOpen={isEndModalOpen} onClose={handleCloseEndModal} onSave={handleSave} />
             <Textarea
                 classNames={{ input: textAreaStyle }}
