@@ -1,9 +1,9 @@
 import { MutableRefObject, useCallback } from "react";
 
+import { convertText } from "@/models";
 import { useMutationStates } from "@/states";
 import { useDiary } from "@/states/diary";
 import { useSocket } from "@/states/socket";
-import { convertText } from "@/utils";
 import { guardUndef } from "@/utils/guardUndef";
 
 export const useReceiveService = (clientTextRef: MutableRefObject<string>) => {

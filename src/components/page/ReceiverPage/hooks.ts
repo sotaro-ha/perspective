@@ -2,10 +2,11 @@ import { useParams } from "next/navigation";
 import { MutableRefObject, useCallback, useRef } from "react";
 import { match } from "ts-pattern";
 
+import { convertText } from "@/models";
 import { useMutationStates } from "@/states";
 import { useDiary } from "@/states/diary";
 import { sendTextToAI } from "@/usecase";
-import { convertText, guardUndef } from "@/utils";
+import { guardUndef } from "@/utils";
 
 const FETCH_COUNT = 5;
 
