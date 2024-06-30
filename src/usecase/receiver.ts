@@ -1,6 +1,6 @@
 import { MutableRefObject, useCallback } from "react";
 
-import { convertText } from "@/models";
+import { SocketMessage, convertText } from "@/models";
 import { useMutationStates } from "@/states";
 import { useDiary } from "@/states/diary";
 import { useSocket } from "@/states/socket";
@@ -21,8 +21,10 @@ export const useReceiveService = (clientTextRef: MutableRefObject<string>) => {
     }, []);
 
     const handleReceive = useCallback(
-        (value: string) => {
-            const text = convertText(value);
+        (message: SocketMessage) => {
+            const { text: streamerText, cursorPosition } = message;
+            const text = convertText(streamerText);
+            console.log(cursorPosition);
 
             if (text.length < mutatedLength) {
                 cancelMutation(text);
@@ -33,7 +35,7 @@ export const useReceiveService = (clientTextRef: MutableRefObject<string>) => {
                     ? [...prev.slice(0, mutatedLength), ...text.slice(mutatedLength)]
                     : prev.slice(0, text.length - 1)
             );
-            clientTextRef.current = value;
+            clientTextRef.current = streamerText;
         },
         [setReceivedText, mutatedLength, cancelMutation, clientTextRef]
     );
