@@ -5,7 +5,7 @@ import { Button, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 import EndModal from "./EndModal";
-import { useStream } from "./hooks";
+import { useStreamer } from "./hooks";
 import StartModal from "./StartModal";
 
 import { textAreaStyle } from "./page.css";
@@ -15,9 +15,10 @@ export const StreamerPage = () => {
     const [isEndModalOpen, setIsEndModalOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const {
+        textareaRef,
         clientText,
         handler: { handleInputChange, resetText },
-    } = useStream();
+    } = useStreamer();
 
     useEffect(() => {
         // Show the start modal when the component mounts
@@ -84,6 +85,7 @@ export const StreamerPage = () => {
                 value={clientText}
                 onChange={handleInputChange}
                 placeholder="Write message"
+                ref={textareaRef}
             />
 
             <Button onClick={handleEndExperience}>体験を終了する</Button>

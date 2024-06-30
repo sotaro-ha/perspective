@@ -23,9 +23,8 @@ export const useMutationStates = () => {
     );
 
     const cancelMutation = useCallback(
-        (clientText: string[]) => {
-            console.log(clientText);
-            setMutatedLength(clientText.length);
+        (clientInputIndex: number) => {
+            setMutatedLength(clientInputIndex);
         },
         [setMutatedLength]
     );
