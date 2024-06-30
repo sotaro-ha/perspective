@@ -2,7 +2,7 @@ import { useParams } from "next/navigation";
 import { MutableRefObject, useCallback, useRef } from "react";
 import { match } from "ts-pattern";
 
-import { convertText } from "@/models";
+import { convertStreamerTextToReceiverText } from "@/models";
 import { useMutationStates } from "@/states";
 import { useDiary } from "@/states/diary";
 import { sendTextToAI } from "@/usecase";
@@ -27,9 +27,13 @@ export const useReceiver = () => {
 
     const updateText = useCallback(
         (mutatedText: string[]) => {
-            setReceivedText((prevText) => [...mutatedText, ...prevText.slice(mutatedText.length)]);
+            setReceivedText((prevText) => [
+                ...prevText.slice(0, mutatedLength),
+                ...mutatedText,
+                ...prevText.slice(mutatedLength + mutatedText.length),
+            ]);
         },
-        [setReceivedText]
+        [setReceivedText, mutatedLength]
     );
 
     const mutateText = useCallback(
@@ -51,11 +55,11 @@ export const useReceiver = () => {
     );
 
     const handleInputChange = useCallback(
-        async (textRef: MutableRefObject<string>) => {
-            const value = guardUndef(textRef.current);
-            const text = convertText(value);
+        async (clientTextRef: MutableRefObject<string>) => {
+            const clientText = guardUndef(clientTextRef.current);
+            const convertedClientText = convertStreamerTextToReceiverText(clientText);
             // 句読点と改行の数をカウント
-            const mutateTarget = text.slice(mutatedLength, -1);
+            const mutateTarget = convertedClientText.slice(mutatedLength, -1);
             console.log(mutateTarget, mutatedLength);
             const count = mutateTarget.length;
 
