@@ -85,6 +85,7 @@ export const StreamerPage = () => {
                 value={clientText}
                 onChange={handleInputChange}
                 placeholder="Write message"
+                ref={textareaRef}
             />
 
             <Button onClick={handleEndExperience}>体験を終了する</Button>
