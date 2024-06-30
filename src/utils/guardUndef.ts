@@ -5,10 +5,22 @@ export function guardUndef<T>(value: T): NonNullable<T> {
 
     return value;
 }
+type DeepNonNullable<T> = T extends object
+    ? { [key in keyof T]-?: DeepNonNullable<T[key]> }
+    : NonNullable<T>;
 
-export function guardAllUndef<T extends Record<string, any>>(object: T): T {
-    if (Object.values(object).every((val) => val === undefined || val === null)) {
-        throw new Error("Object has all undefined or null properties");
+export function guardRecursiveUndef<T>(value: T): DeepNonNullable<T> {
+    if (value === undefined || value === null) {
+        throw new Error("value is undefined or null");
     }
-    return object;
+
+    if (typeof value === "object" && value !== undefined && value !== null) {
+        for (const key in value) {
+            if (Object.prototype.hasOwnProperty.call(value, key)) {
+                (value as any)[key] = guardRecursiveUndef((value as any)[key]);
+            }
+        }
+    }
+
+    return value as DeepNonNullable<T>;
 }

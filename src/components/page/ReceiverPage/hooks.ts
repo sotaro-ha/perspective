@@ -1,12 +1,12 @@
 import { useParams } from "next/navigation";
-import { MutableRefObject, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { match } from "ts-pattern";
 
 import { convertStreamerTextToReceiverText } from "@/models";
 import { useMutationStates } from "@/states";
 import { useDiary } from "@/states/diary";
 import { sendTextToAI } from "@/usecase";
-import { guardUndef } from "@/utils";
+import { guardRecursiveUndef, guardUndef } from "@/utils";
 
 const FETCH_COUNT = 5;
 
@@ -21,9 +21,9 @@ export const useReceiver = () => {
     } = useMutationStates();
 
     const params = useParams();
-    const id = parseInt(params.id[0], 10);
+    const reciverId = parseInt(params.id[0], 10);
 
-    const receivedTextRef = useRef<HTMLDivElement>(null);
+    const clientTextRef = useRef<string>("");
 
     const updateText = useCallback(
         (mutatedText: string[]) => {
@@ -39,11 +39,24 @@ export const useReceiver = () => {
     const mutateText = useCallback(
         async (targetText: string[]) => {
             startMutation();
-            const res = await sendTextToAI(targetText, id);
+            const res = await sendTextToAI(targetText, reciverId, mutatedLength);
             match(res)
                 .with({ status: "ok" }, () => {
-                    const mutatedText = guardUndef(res.val);
-                    updateText(mutatedText);
+                    const { mutatedText, mutatedLength: resMutatedLength } = guardRecursiveUndef(
+                        res.val
+                    );
+                    const clientText = guardUndef(clientTextRef.current);
+                    const convertedClientText = convertStreamerTextToReceiverText(clientText);
+
+                    if (
+                        convertedClientText
+                            .slice(resMutatedLength, resMutatedLength + mutatedText.length)
+                            .join("") === targetText.join("")
+                    ) {
+                        updateText(mutatedText);
+                    } else {
+                        console.log("cancel mutation update");
+                    }
                     finishMutation(mutatedText);
                 })
                 .with({ status: "err" }, () => {
@@ -51,29 +64,30 @@ export const useReceiver = () => {
                     finishMutation([]);
                 });
         },
-        [startMutation, updateText, finishMutation, id]
+        [startMutation, updateText, finishMutation, reciverId, mutatedLength]
     );
 
-    const handleInputChange = useCallback(
-        async (clientTextRef: MutableRefObject<string>) => {
-            const clientText = guardUndef(clientTextRef.current);
-            const convertedClientText = convertStreamerTextToReceiverText(clientText);
-            // 句読点と改行の数をカウント
-            const mutateTarget = convertedClientText.slice(mutatedLength, -1);
-            console.log(mutateTarget, mutatedLength);
-            const count = mutateTarget.length;
+    const handleInputChange = useCallback(async () => {
+        const clientText = guardUndef(clientTextRef.current);
+        const convertedClientText = convertStreamerTextToReceiverText(clientText);
+        // 句読点と改行の数をカウント
+        const mutateTarget = convertedClientText.slice(mutatedLength, -1);
+        console.log(mutateTarget, mutatedLength);
+        const count = mutateTarget.length;
 
-            // 5回以上の場合は mutation 実行
-            if (count >= FETCH_COUNT && !isMutating) {
-                console.log(`句点または改行が5回以上入力されました。: ${mutateTarget}`);
-                await mutateText(mutateTarget);
-            }
-        },
-        [isMutating, mutateText, mutatedLength]
-    );
+        // 5回以上の場合は mutation 実行
+        if (count >= FETCH_COUNT && !isMutating) {
+            console.log(`句点または改行が5回以上入力されました。: ${mutateTarget}`);
+            await mutateText(mutateTarget);
+        }
+    }, [isMutating, mutateText, mutatedLength]);
+
+    useEffect(() => {
+        handleInputChange();
+    }, [receivedText]);
 
     return {
-        receivedTextRef,
+        clientTextRef,
         receivedText,
         handler: {
             handleInputChange,

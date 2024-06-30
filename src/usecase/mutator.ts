@@ -8,18 +8,17 @@ import {
     guardUndef,
 } from "@/utils";
 
-export const sendTextToAI = (async (text: string[], id: number) => {
+export const sendTextToAI = (async (text: string[], id: number, mutatedLength: number) => {
     const reqBody: MutateTextBody = {
         targetText: text,
-        textIndex: 0, //FIXME: ここいらないかも
+        mutatedLength: mutatedLength,
         clientId: id,
     };
 
     try {
         const res = await mutateText(reqBody);
         console.log(res);
-        const mutatedText = res.data.result?.mutatedText;
-        return UsecaseOk(guardUndef(mutatedText));
+        return UsecaseOk(guardUndef(res.data.result));
     } catch (error) {
         return UsecaseError(new Error(`AI送信失敗: ${error}`));
     }
