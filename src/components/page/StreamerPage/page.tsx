@@ -1,15 +1,16 @@
 "use client";
 import { Textarea } from "@mantine/core";
 
-import { useStream } from "./hooks";
+import { useStreamer } from "./hooks";
 
 import { textAreaStyle } from "./page.css";
 
 export const StreamerPage = () => {
     const {
+        textareaRef,
         clientText,
         handler: { handleInputChange },
-    } = useStream();
+    } = useStreamer();
 
     return (
         <Textarea
@@ -17,6 +18,7 @@ export const StreamerPage = () => {
             value={clientText}
             onChange={handleInputChange}
             placeholder="Write message"
+            ref={textareaRef}
         ></Textarea>
     );
 };
