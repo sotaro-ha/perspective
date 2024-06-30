@@ -3,21 +3,23 @@
 import { atom, useAtom } from "jotai";
 import { useCallback } from "react";
 
+import { mutationState } from "@/models";
+
 const mutatedLengthAtom = atom<number>(0);
-const isMutatingAtom = atom<boolean>(false);
+const isMutatingAtom = atom<mutationState>("ready");
 
 export const useMutationStates = () => {
     const [mutatedLength, setMutatedLength] = useAtom(mutatedLengthAtom);
     const [isMutating, setIsMutating] = useAtom(isMutatingAtom);
 
     const startMutation = useCallback(() => {
-        setIsMutating(true);
+        setIsMutating("pending");
     }, [setIsMutating]);
 
     const finishMutation = useCallback(
         (mutatedText: string[]) => {
             setMutatedLength((prev) => prev + mutatedText.length);
-            setIsMutating(false);
+            setIsMutating("ready");
         },
         [setIsMutating, setMutatedLength]
     );
