@@ -19,7 +19,7 @@ paths:
                                 clientId:
                                     type: integer
                                     description: ID of the window where the text is located.
-                                textIndex:
+                                mutatedLength:
                                     type: integer
                                     description: Index of the text to be mutated.
                                 targetText:
@@ -29,7 +29,7 @@ paths:
                                     description: Text to be mutated.
                             required:
                                 - clientId
-                                - textIndex
+                                - mutatedLength
                                 - targetText
             responses:
                 "200":
@@ -42,7 +42,7 @@ paths:
                                     result:
                                         type: object
                                         properties:
-                                            textIndex:
+                                            mutatedLength:
                                                 type: integer
                                                 description: text index in the contents
                                             mutatedText:
@@ -54,7 +54,7 @@ paths:
                                 {
                                     result:
                                         {
-                                            textIndex: 0,
+                                            mutatedLength: 0,
                                             mutatedText:
                                                 ["hoge.", "fuga.", "piyo.", "blar.", "fooooo."],
                                         },
