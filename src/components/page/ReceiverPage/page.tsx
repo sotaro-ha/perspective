@@ -32,7 +32,6 @@ export const ReceiverPage = () => {
 
     return (
         <div>
-            <h1>Received Messages</h1>
             <div>{receivedText}</div>
         </div>
     );
