@@ -1,27 +1,22 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable unused-imports/no-unused-vars */
+/* eslint-disable no-empty-pattern */
 "use client";
 import { Button, Group, Modal, Text, Tooltip } from "@mantine/core";
 import { IconApple, IconBook, IconBrush, IconPencil } from "@tabler/icons-react";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import { ExperienceOption, experienceOptionList } from "@/models";
-import { useExperenceStates } from "@/states";
+
+import { useStartModal } from "./hooks";
 
 import { buttonLabelStyle, buttonRootStyle } from "./StartModal.css";
 
-interface StartModalProps {
-    onClose: () => void;
-    onSelect: (option: string) => void;
-}
+interface StartModalProps {}
 
-export const StartModal: FC<StartModalProps> = ({ onClose, onSelect }) => {
+export const StartModal: FC<StartModalProps> = ({}) => {
     const {
-        modalState: { isStartModalOpen },
-        handler: { handleStart },
-    } = useExperenceStates();
-    const [hoveredOption, setHoveredOption] = useState<string | null>(null);
-
+        isStartModalOpen,
+        handler: { handleClick, handleClose },
+    } = useStartModal();
     const iconMap: Record<NonNullable<ExperienceOption>["key"], React.ElementType> = {
         apple: IconApple,
         book: IconBook,
@@ -32,7 +27,7 @@ export const StartModal: FC<StartModalProps> = ({ onClose, onSelect }) => {
     return (
         <Modal
             opened={isStartModalOpen}
-            onClose={() => handleStart(null)}
+            onClose={handleClose}
             size="lg"
             title="体験を始めます"
             centered
@@ -46,9 +41,7 @@ export const StartModal: FC<StartModalProps> = ({ onClose, onSelect }) => {
                     return (
                         <Tooltip label={option.label} key={option.key}>
                             <Button
-                                onClick={() => onSelect(option.value)}
-                                onMouseEnter={() => setHoveredOption(option.value)}
-                                onMouseLeave={() => setHoveredOption(null)}
+                                onClick={() => handleClick(option)}
                                 classNames={{
                                     root: buttonRootStyle,
                                     label: buttonLabelStyle,

@@ -27,14 +27,8 @@ export const useExperenceStates = () => {
         setExperienceState((prev) => ({ ...prev, stage: "finish" }));
     }, [setExperienceState]);
 
-    const isStartModalOpen = experienceState.stage === "init";
-    const isEndModalOpen = experienceState.stage === "finish";
-
     return {
-        modalState: {
-            isStartModalOpen,
-            isEndModalOpen,
-        },
+        experienceState,
         handler: {
             handleInit,
             handleStart,
