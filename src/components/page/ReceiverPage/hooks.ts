@@ -16,7 +16,6 @@ export const useReceiver = () => {
     const {
         isMutating,
         mutatedLength,
-        targetText,
         mutator: { startMutation, finishMutation },
     } = useMutationStates();
 
@@ -55,19 +54,17 @@ export const useReceiver = () => {
             const value = guardUndef(textRef.current);
             const text = convertText(value);
             // 句読点と改行の数をカウント
-            const checkTarget = text.slice(mutatedLength);
-            console.log(checkTarget, mutatedLength);
-            const count = checkTarget.length;
+            const mutateTarget = text.slice(mutatedLength, -1);
+            console.log(mutateTarget, mutatedLength);
+            const count = mutateTarget.length;
 
             // 5回以上の場合は mutation 実行
-            if (count > FETCH_COUNT && !isMutating) {
-                console.log(
-                    `句点または改行が5回以上入力されました。: ${targetText.slice(0, mutatedLength + FETCH_COUNT)}`
-                );
-                await mutateText(targetText.slice(0, mutatedLength + FETCH_COUNT));
+            if (count >= FETCH_COUNT && !isMutating) {
+                console.log(`句点または改行が5回以上入力されました。: ${mutateTarget}`);
+                await mutateText(mutateTarget);
             }
         },
-        [isMutating, targetText, mutateText, mutatedLength]
+        [isMutating, mutateText, mutatedLength]
     );
 
     return {
