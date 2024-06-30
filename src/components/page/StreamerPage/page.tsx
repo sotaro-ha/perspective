@@ -1,14 +1,14 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable unused-imports/no-unused-vars */
 "use client";
-import { Textarea, Button } from "@mantine/core";
+import { Button, Textarea } from "@mantine/core";
+import { useEffect, useState } from "react";
 
+import EndModal from "./EndModal";
 import { useStream } from "./hooks";
+import StartModal from "./StartModal";
 
 import { textAreaStyle } from "./page.css";
-
-import { useState, useEffect } from "react";
-
-import StartModal from "./StartModal";
-import EndModal from "./EndModal";
 
 export const StreamerPage = () => {
     const [isStartModalOpen, setIsStartModalOpen] = useState(false);
@@ -25,14 +25,14 @@ export const StreamerPage = () => {
 
         // Add event listener for ESC key
         const handleEsc = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
+            if (event.key === "Escape") {
                 handleEndExperience();
             }
         };
-        document.addEventListener('keydown', handleEsc);
+        document.addEventListener("keydown", handleEsc);
 
         return () => {
-            document.removeEventListener('keydown', handleEsc);
+            document.removeEventListener("keydown", handleEsc);
         };
     }, []);
 
@@ -43,13 +43,13 @@ export const StreamerPage = () => {
 
     const handleSave = (option: string) => {
         // Prepend "公開可" if the option is "public"
-        const textToSave = option === 'public' ? `公開可\n${clientText}` : clientText;
+        const textToSave = option === "public" ? `公開可\n${clientText}` : clientText;
 
         // Create a blob with the text data
         const date = new Date().toISOString();
-        const blob = new Blob([textToSave], { type: 'text/plain' });
+        const blob = new Blob([textToSave], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
         link.download = `experienceData_${date}_${option}.txt`;
         document.body.appendChild(link);
@@ -73,7 +73,11 @@ export const StreamerPage = () => {
 
     return (
         <>
-            <StartModal isOpen={isStartModalOpen} onClose={() => setIsStartModalOpen(false)} onSelect={handleStartSelect} />
+            <StartModal
+                isOpen={isStartModalOpen}
+                onClose={() => setIsStartModalOpen(false)}
+                onSelect={handleStartSelect}
+            />
             <EndModal isOpen={isEndModalOpen} onClose={handleCloseEndModal} onSave={handleSave} />
             <Textarea
                 classNames={{ input: textAreaStyle }}
@@ -82,12 +86,7 @@ export const StreamerPage = () => {
                 placeholder="Write message"
             />
 
-            <Button
-                onClick={handleEndExperience}
-
-            >
-                体験を終了する
-            </Button>
+            <Button onClick={handleEndExperience}>体験を終了する</Button>
         </>
     );
 };
