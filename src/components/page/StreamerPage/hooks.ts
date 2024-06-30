@@ -32,7 +32,7 @@ export const useStreamer = () => {
         [updateText, sendToServer]
     );
 
-    const resetText = useCallback(() => {
+    const handleReset = useCallback(() => {
         setClientText("");
     }, [setClientText]);
 
@@ -41,7 +41,7 @@ export const useStreamer = () => {
         clientText,
         handler: {
             handleInputChange,
-            resetText
+            handleReset,
         },
     };
 };
