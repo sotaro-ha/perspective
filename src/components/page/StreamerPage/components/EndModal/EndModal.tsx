@@ -48,23 +48,11 @@ export const EndModal: FC<EndModalProps> = ({}) => {
                 保存した内容は，許可された用途以外に用いられることはありません．何かご不明点があれば，担当者にお伝えください．
             </Text>
             <div className={contentContainer}>
-                <Button
-                    variant="outline"
-                    onClick={handleClick}
-                    style={{ marginRight: "0.5rem", width: "100%", marginTop: "1rem" }}
-                >
+                <Button variant="outline" onClick={handleClick}>
                     保存しない
                 </Button>
-                <Button
-                    onClick={() => handleSave("private")}
-                    style={{ marginTop: "1rem", width: "100%" }}
-                >
-                    保存してもよいが，公開しない
-                </Button>
-                <Button
-                    onClick={() => handleSave("public")}
-                    style={{ marginTop: "1rem", width: "100%" }}
-                >
+                <Button onClick={() => handleSave("private")}>保存してもよいが，公開しない</Button>
+                <Button onClick={() => handleSave("public")}>
                     保存してもよく，今後の展示で公開しても良い
                 </Button>
             </div>
