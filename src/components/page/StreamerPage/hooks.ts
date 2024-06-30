@@ -32,11 +32,16 @@ export const useStreamer = () => {
         [updateText, sendToServer]
     );
 
+    const resetText = useCallback(() => {
+        setClientText("");
+    }, [setClientText]);
+
     return {
         textareaRef,
         clientText,
         handler: {
             handleInputChange,
+            resetText
         },
     };
 };
