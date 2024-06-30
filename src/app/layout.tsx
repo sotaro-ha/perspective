@@ -19,7 +19,7 @@ const notoSansJP = Noto_Sans_JP({
 
 export const metadata: Metadata = {
     title: "III-Exhibition Extra Works-HAI.",
-    description: "human-AI pair drawing app",
+    description: "human-AI pair writing app",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

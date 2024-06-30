@@ -6,3 +6,8 @@ export const textAreaStyle = style({
     height: "95vh",
     fontSize: vars.fontSizes.xl,
 });
+
+export const buttonStyle = style({
+    width: "100%",
+    marginTop: "1rem",
+});

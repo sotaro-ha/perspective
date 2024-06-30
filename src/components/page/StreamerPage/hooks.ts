@@ -25,10 +25,15 @@ export const useStream = () => {
         [updateText, sendToServer]
     );
 
+    const resetText = useCallback(() => {
+        setClientText("");
+    }, [setClientText]);
+
     return {
         clientText,
         handler: {
             handleInputChange,
+            resetText
         },
     };
 };
