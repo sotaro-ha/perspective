@@ -30,7 +30,6 @@ export const StreamerPage = () => {
                 diaryHandler.handleFinish();
             })
             .with("Demo", () => {
-                handleReset();
                 demoHandler.handleInit();
             });
     }, [experienceState, diaryHandler, demoHandler]);
@@ -42,6 +41,9 @@ export const StreamerPage = () => {
     const intervalRef = useRef<number>(0);
 
     useEffect(() => {
+        if (experienceState.stage !== "finish") {
+            handleReset(); //finishの時は保存するのでresetしない
+        }
         if (experienceState.mode === "Demo" && experienceState.selection) {
             const demoText = demoInput[experienceState.selection.key];
             let index = 1; // 初期値を1に設定して、最初の文字を表示
