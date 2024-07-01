@@ -12,7 +12,7 @@ import { useStreamer } from "./hooks";
 
 import { DemoModal, EndModal, StartModal } from "./components";
 
-import { textAreaStyle } from "./page.css";
+import { controlAreaStyle, textAreaStyle, wrapper } from "./page.css";
 
 export const StreamerPage = () => {
     const {
@@ -33,8 +33,12 @@ export const StreamerPage = () => {
             });
     }, [experienceState, diaryHandler, demoHandler]);
 
+    const handleBackButtonClick = useCallback(() => {
+        demoHandler.handleSelectDemo();
+    }, [demoHandler]);
+
     return (
-        <>
+        <div className={wrapper}>
             <StartModal />
             <DemoModal />
             <EndModal />
@@ -46,9 +50,16 @@ export const StreamerPage = () => {
                 ref={textareaRef}
             />
 
-            <Button onClick={handleEndButtonClick}>
-                {`${experienceDataList.find((item) => item.mode === experienceState.mode)?.label}を終了する`}
-            </Button>
-        </>
+            <div className={controlAreaStyle}>
+                {experienceState.mode !== null && (
+                    <Button onClick={handleEndButtonClick}>
+                        {`${experienceDataList.find((item) => item.mode === experienceState.mode)?.label}を終了する`}
+                    </Button>
+                )}
+                {experienceState.mode === "Demo" && (
+                    <Button onClick={handleBackButtonClick}>他のデモを見る</Button>
+                )}
+            </div>
+        </div>
     );
 };

@@ -11,7 +11,7 @@ import { buttonLabelStyle, buttonRootStyle } from "./DemoModal.css";
 export const DemoModal = () => {
     const {
         isDemoModalOpen,
-        handler: { handleClick },
+        handler: { handleClick, handleClose },
     } = useDemoModal();
     const iconMap: Record<DemoSelection["key"], React.ElementType> = {
         apple: IconApple,
@@ -23,7 +23,7 @@ export const DemoModal = () => {
     return (
         <Modal
             opened={isDemoModalOpen}
-            onClose={() => {}}
+            onClose={handleClose}
             size="lg"
             title="体験を始めます"
             centered

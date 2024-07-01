@@ -29,6 +29,7 @@ export const StartModal: FC<StartModalProps> = ({}) => {
             size="lg"
             title="体験を始めます"
             centered
+            withCloseButton={false}
         >
             <Text>
                 体験を開始する方法を選んでください．自分で書く前にでもを確認することもできます．

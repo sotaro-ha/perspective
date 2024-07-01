@@ -7,6 +7,10 @@ export const useDemoModal = () => {
     const { experienceState, demoHandler } = useExperenceStates();
     const isDemoModalOpen = experienceState.stage === "select";
 
+    const handleClose = useCallback(() => {
+        demoHandler.handleInit();
+    }, [demoHandler]);
+
     const handleClick = useCallback(
         (selection: DemoSelection) => {
             demoHandler.handleExperience(selection);
@@ -17,6 +21,7 @@ export const useDemoModal = () => {
     return {
         isDemoModalOpen,
         handler: {
+            handleClose,
             handleClick,
         },
     };
