@@ -5,38 +5,47 @@ import { useCallback } from "react";
 
 import { mutationState } from "@/models";
 
-const mutatedLengthAtom = atom<number>(0);
-const isMutatingAtom = atom<mutationState>("ready");
+const defaultMutationState: mutationState = {
+    stage: "ready",
+    mutatedLength: 0,
+};
+
+const mutationStateAtom = atom<mutationState>(defaultMutationState);
 
 export const useMutationStates = () => {
-    const [mutatedLength, setMutatedLength] = useAtom(mutatedLengthAtom);
-    const [isMutating, setIsMutating] = useAtom(isMutatingAtom);
+    const [mutationState, setMutationState] = useAtom(mutationStateAtom);
 
-    const startMutation = useCallback(() => {
-        setIsMutating("pending");
-    }, [setIsMutating]);
+    const lockMutation = useCallback(() => {
+        setMutationState((prev) => ({ ...prev, stage: "pending" }));
+    }, [setMutationState]);
 
-    const finishMutation = useCallback(
-        (mutatedText: string[]) => {
-            setMutatedLength((prev) => prev + mutatedText.length);
-            setIsMutating("ready");
+    const unlockMutation = useCallback(
+        (mutatedLength: number) => {
+            setMutationState((prev) => ({
+                ...prev,
+                mutatedLength: prev.mutatedLength + mutatedLength,
+                stage: "ready",
+            }));
         },
-        [setIsMutating, setMutatedLength]
+        [setMutationState]
     );
 
     const cancelMutation = useCallback(
-        (clientInputIndex: number) => {
-            setMutatedLength(clientInputIndex);
+        (cancelIndex: number) => {
+            setMutationState((prev) => ({
+                ...prev,
+                mutatedLength: cancelIndex,
+                stage: "cancel",
+            }));
         },
-        [setMutatedLength]
+        [setMutationState]
     );
 
     return {
-        mutatedLength,
-        isMutating,
+        mutationState,
         mutator: {
-            startMutation,
-            finishMutation,
+            lockMutation,
+            unlockMutation,
             cancelMutation,
         },
     };

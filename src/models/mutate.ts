@@ -1,3 +1,7 @@
-export const mutationStateList = ["ready", "pending", "update"];
+export const mutationStateList = ["ready", "pending", "cancel"] as const;
 
-export type mutationState = (typeof mutationStateList)[number];
+export type mutationStage = (typeof mutationStateList)[number];
+export type mutationState = {
+    stage: mutationStage;
+    mutatedLength: number;
+};

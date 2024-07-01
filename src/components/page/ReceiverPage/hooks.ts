@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { match } from "ts-pattern";
 
 import { convertStreamerTextToReceiverText } from "@/models";
@@ -15,9 +15,8 @@ export const useReceiver = () => {
         receiver: { receivedText, setReceivedText },
     } = useDiary();
     const {
-        isMutating,
-        mutatedLength,
-        mutator: { startMutation, finishMutation },
+        mutationState,
+        mutator: { lockMutation, unlockMutation },
     } = useMutationStates();
 
     const params = useParams();
@@ -28,18 +27,18 @@ export const useReceiver = () => {
     const updateText = useCallback(
         (mutatedText: string[]) => {
             setReceivedText((prevText) => [
-                ...prevText.slice(0, mutatedLength),
+                ...prevText.slice(0, mutationState.mutatedLength),
                 ...mutatedText,
-                ...prevText.slice(mutatedLength + mutatedText.length),
+                ...prevText.slice(mutationState.mutatedLength + mutatedText.length),
             ]);
         },
-        [setReceivedText, mutatedLength]
+        [setReceivedText, mutationState]
     );
 
     const mutateText = useCallback(
         async (targetText: string[]) => {
-            startMutation();
-            const res = await sendTextToAI(targetText, reciverId, mutatedLength);
+            lockMutation();
+            const res = await sendTextToAI(targetText, reciverId, mutationState.mutatedLength);
             match(res)
                 .with({ status: "ok" }, () => {
                     const { mutatedText, mutatedLength: resMutatedLength } = guardRecursiveUndef(
@@ -54,37 +53,34 @@ export const useReceiver = () => {
                             .join("") === targetText.join("")
                     ) {
                         updateText(mutatedText);
+                        unlockMutation(mutatedText.length);
                     } else {
                         console.log("cancel mutation update");
+                        unlockMutation(0);
                     }
-                    finishMutation(mutatedText);
                 })
                 .with({ status: "err" }, () => {
                     console.log(res.err?.message);
-                    finishMutation([]);
+                    unlockMutation(0);
                 });
         },
-        [startMutation, updateText, finishMutation, reciverId, mutatedLength]
+        [lockMutation, updateText, unlockMutation, reciverId, mutationState]
     );
 
     const handleInputChange = useCallback(async () => {
         const clientText = guardUndef(clientTextRef.current);
         const convertedClientText = convertStreamerTextToReceiverText(clientText);
         // 句読点と改行の数をカウント
-        const mutateTarget = convertedClientText.slice(mutatedLength, -1);
-        console.log(mutateTarget, mutatedLength);
+        const mutateTarget = convertedClientText.slice(mutationState.mutatedLength, -1);
+        console.log(mutateTarget, mutationState.mutatedLength, mutationState);
         const count = mutateTarget.length;
 
         // 5回以上の場合は mutation 実行
-        if (count >= FETCH_COUNT && !isMutating) {
+        if (count >= FETCH_COUNT && mutationState.stage === "ready") {
             console.log(`句点または改行が5回以上入力されました。: ${mutateTarget}`);
             await mutateText(mutateTarget);
         }
-    }, [isMutating, mutateText, mutatedLength]);
-
-    useEffect(() => {
-        handleInputChange();
-    }, [receivedText]);
+    }, [mutationState, mutateText]);
 
     return {
         clientTextRef,
