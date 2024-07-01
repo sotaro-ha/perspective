@@ -5,15 +5,15 @@ import { buttonLabelStyle, buttonRootStyle } from "./PrismaButton.css";
 
 type props = {
     label: string;
-    key?: Key;
+    keyValue?: Key;
     onClick: () => void;
     IconComponent: ElementType;
 };
 
 export const PrismaButton: FC<props> = (props) => {
-    const { label, key, onClick, IconComponent } = props;
+    const { label, keyValue, onClick, IconComponent } = props;
     return (
-        <Tooltip label={label} key={key}>
+        <Tooltip label={label} key={keyValue}>
             <Button
                 onClick={onClick}
                 classNames={{
