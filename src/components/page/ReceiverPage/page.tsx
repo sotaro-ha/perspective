@@ -1,17 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
+import { ReceiverId } from "@/models";
 import { useReceiveService } from "@/usecase";
 
 import { useReceiver } from "./hooks";
 
+import { wrapper } from "./page.css";
+
 export const ReceiverPage = () => {
+    const params = useParams();
+    const id = parseInt(params.id[0], 10) as ReceiverId;
+
     const {
         clientTextRef,
         handler: { handleInputChange },
-    } = useReceiver();
+    } = useReceiver(id);
 
     const {
         socket,
@@ -32,7 +39,7 @@ export const ReceiverPage = () => {
     }, [socket, setUpSocket, shutDownSocket]);
 
     return (
-        <div>
+        <div className={wrapper({ id: id })}>
             <div>{receivedText}</div>
         </div>
     );
