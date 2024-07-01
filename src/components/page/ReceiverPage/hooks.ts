@@ -1,3 +1,4 @@
+import { useParams } from "next/navigation";
 import { useCallback, useRef } from "react";
 import { match } from "ts-pattern";
 
@@ -9,7 +10,7 @@ import { guardRecursiveUndef, guardUndef } from "@/utils";
 
 const FETCH_COUNT = 5;
 
-export const useReceiver = (receiverId: number) => {
+export const useReceiver = () => {
     const {
         receiver: { receivedText, setReceivedText },
     } = useDiary();
@@ -17,6 +18,9 @@ export const useReceiver = (receiverId: number) => {
         mutationState,
         mutator: { lockMutation, unlockMutation },
     } = useMutationStates();
+
+    const params = useParams();
+    const reciverId = parseInt(params.id[0], 10);
 
     const clientTextRef = useRef<string>("");
 
@@ -34,7 +38,7 @@ export const useReceiver = (receiverId: number) => {
     const mutateText = useCallback(
         async (targetText: string[]) => {
             lockMutation();
-            const res = await sendTextToAI(targetText, receiverId, mutationState.mutatedLength);
+            const res = await sendTextToAI(targetText, reciverId, mutationState.mutatedLength);
             match(res)
                 .with({ status: "ok" }, () => {
                     const { mutatedText, mutatedLength: resMutatedLength } = guardRecursiveUndef(
@@ -60,7 +64,7 @@ export const useReceiver = (receiverId: number) => {
                     unlockMutation(0);
                 });
         },
-        [lockMutation, updateText, unlockMutation, receiverId, mutationState]
+        [lockMutation, updateText, unlockMutation, reciverId, mutationState]
     );
 
     const handleInputChange = useCallback(async () => {

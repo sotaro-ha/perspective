@@ -3,14 +3,14 @@
 import { atom, useAtom } from "jotai";
 import { useCallback } from "react";
 
-import { MutationState } from "@/models";
+import { mutationState } from "@/models";
 
-const defaultMutationState: MutationState = {
+const defaultMutationState: mutationState = {
     stage: "ready",
     mutatedLength: 0,
 };
 
-const mutationStateAtom = atom<MutationState>(defaultMutationState);
+const mutationStateAtom = atom<mutationState>(defaultMutationState);
 
 export const useMutationStates = () => {
     const [mutationState, setMutationState] = useAtom(mutationStateAtom);
