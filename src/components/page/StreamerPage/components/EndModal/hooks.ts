@@ -5,23 +5,20 @@ import { useExperenceStates } from "@/states";
 import { useStreamer } from "../../hooks";
 
 export const useEndModal = () => {
-    const {
-        experienceState,
-        handler: { handleInit, handleStart },
-    } = useExperenceStates();
+    const { experienceState, diaryHandler } = useExperenceStates();
     const {
         handler: { handleReset },
     } = useStreamer();
     const isEndModalOpen = experienceState.stage === "finish";
 
     const handleClose = useCallback(() => {
-        handleStart(null);
-    }, [handleStart]);
+        diaryHandler.handleExperience();
+    }, [diaryHandler]);
 
     const handleClick = useCallback(() => {
         handleReset();
-        handleInit();
-    }, [handleReset, handleInit]);
+        diaryHandler.handleInit();
+    }, [handleReset, diaryHandler]);
     return {
         isEndModalOpen,
         handler: { handleClick, handleClose },

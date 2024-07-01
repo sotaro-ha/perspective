@@ -1,30 +1,28 @@
-/* eslint-disable no-empty-pattern */
-"use client";
 import { Button, Group, Modal, Text, Tooltip } from "@mantine/core";
-import { IconPencil, IconVideo } from "@tabler/icons-react";
-import React, { FC } from "react";
+import { IconApple, IconBook, IconBrush, IconPencil } from "@tabler/icons-react";
+import React from "react";
 
-import { ExperienceMode, experienceDataList } from "@/models";
+import { DemoSelection, demoSelectionList } from "@/models";
 
-import { useStartModal } from "./hooks";
+import { useDemoModal } from "./hooks";
 
-import { buttonLabelStyle, buttonRootStyle } from "./StartModal.css";
+import { buttonLabelStyle, buttonRootStyle } from "./DemoModal.css";
 
-interface StartModalProps {}
-
-export const StartModal: FC<StartModalProps> = ({}) => {
+export const DemoModal = () => {
     const {
-        isStartModalOpen,
+        isDemoModalOpen,
         handler: { handleClick },
-    } = useStartModal();
-    const iconMap: Record<ExperienceMode, React.ElementType> = {
-        Diary: IconPencil,
-        Demo: IconVideo,
+    } = useDemoModal();
+    const iconMap: Record<DemoSelection["key"], React.ElementType> = {
+        apple: IconApple,
+        book: IconBook,
+        brush: IconBrush,
+        pencil: IconPencil,
     };
 
     return (
         <Modal
-            opened={isStartModalOpen}
+            opened={isDemoModalOpen}
             onClose={() => {}}
             size="lg"
             title="体験を始めます"
@@ -34,15 +32,12 @@ export const StartModal: FC<StartModalProps> = ({}) => {
                 体験を開始する方法を選んでください．自分で書く前にでもを確認することもできます．
             </Text>
             <Group mt="4rem" style={{ display: "flex", justifyContent: "center" }}>
-                {experienceDataList.map((experienceData) => {
-                    const IconComponent = iconMap[experienceData.mode];
+                {demoSelectionList.map((selection) => {
+                    const IconComponent = iconMap[selection.key];
                     return (
-                        <Tooltip
-                            label={`${experienceData.label}を開始する`}
-                            key={experienceData.mode}
-                        >
+                        <Tooltip label={selection.label} key={selection.key}>
                             <Button
-                                onClick={() => handleClick(experienceData.mode)}
+                                onClick={() => handleClick(selection)}
                                 classNames={{
                                     root: buttonRootStyle,
                                     label: buttonLabelStyle,
