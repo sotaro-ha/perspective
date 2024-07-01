@@ -1,38 +1,60 @@
 import { atom, useAtom } from "jotai";
 import { useCallback } from "react";
 
-import { ExperenceState, ExperienceOption } from "@/models";
+import { DemoSelection, ExperienceMode, ExperienceState } from "@/models";
+import { guardUndef } from "@/utils";
 
-const defaultExperienceState: ExperenceState = {
+const defaultExperienceState: ExperienceState = {
+    mode: null,
     stage: "init",
-    option: null,
 };
-const experienceAtom = atom<ExperenceState>(defaultExperienceState);
+const experienceAtom = atom<ExperienceState>(defaultExperienceState);
 
 export const useExperenceStates = () => {
     const [experienceState, setExperienceState] = useAtom(experienceAtom);
 
+    const handleSelectMode = useCallback(
+        (mode: NonNullable<ExperienceMode>) => {
+            setExperienceState((prev) => ({ mode: mode, stage: prev.stage }) as ExperienceState);
+        },
+        [setExperienceState]
+    );
     const handleInit = useCallback(() => {
         setExperienceState(defaultExperienceState);
     }, [setExperienceState]);
 
-    const handleStart = useCallback(
-        (option: ExperienceOption) => {
-            setExperienceState({ stage: "active", option: option });
+    const handleSelectDemo = useCallback(() => {
+        setExperienceState({ mode: "Demo", stage: "select" });
+    }, [setExperienceState]);
+
+    const handleExperience = useCallback(
+        (selection?: DemoSelection) => {
+            setExperienceState((prev) => ({
+                mode: guardUndef(prev.mode),
+                stage: "experience",
+                selection: selection,
+            }));
         },
         [setExperienceState]
     );
 
     const handleFinish = useCallback(() => {
-        setExperienceState((prev) => ({ ...prev, stage: "finish" }));
+        setExperienceState({ stage: "finish", mode: "Diary" });
     }, [setExperienceState]);
 
     return {
         experienceState,
-        handler: {
+        diaryHandler: {
             handleInit,
-            handleStart,
+            handleSelectMode,
+            handleExperience,
             handleFinish,
+        },
+        demoHandler: {
+            handleInit,
+            handleSelectMode,
+            handleSelectDemo,
+            handleExperience,
         },
     };
 };

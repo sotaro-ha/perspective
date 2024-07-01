@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 
 import { StreamerText } from "@/models";
 import { useDiary } from "@/states/diary";
@@ -21,8 +21,7 @@ export const useStreamer = () => {
     );
 
     const handleInputChange = useCallback(
-        (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            const { value: streamerText } = event.target;
+        (streamerText: StreamerText) => {
             updateText(streamerText);
             sendToServer({
                 text: streamerText,
@@ -39,6 +38,7 @@ export const useStreamer = () => {
     return {
         textareaRef,
         clientText,
+        updateText,
         handler: {
             handleInputChange,
             handleReset,

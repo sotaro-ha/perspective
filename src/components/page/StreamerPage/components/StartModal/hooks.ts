@@ -1,31 +1,33 @@
 import { useCallback } from "react";
+import { match } from "ts-pattern";
 
-import { ExperienceOption } from "@/models";
+import { ExperienceMode } from "@/models";
 import { useExperenceStates } from "@/states";
+import { guardUndef } from "@/utils";
 
 export const useStartModal = () => {
-    const {
-        experienceState,
-        handler: { handleStart },
-    } = useExperenceStates();
+    const { experienceState, diaryHandler, demoHandler } = useExperenceStates();
 
     const isStartModalOpen = experienceState.stage === "init";
 
-    const handleClose = useCallback(() => {
-        handleStart(null);
-    }, [handleStart]);
-
     const handleClick = useCallback(
-        (option: ExperienceOption) => {
-            handleStart(option);
+        (mode: ExperienceMode) => {
+            match(mode)
+                .with("Diary", () => {
+                    diaryHandler.handleSelectMode(guardUndef(mode));
+                    diaryHandler.handleExperience();
+                })
+                .with("Demo", () => {
+                    demoHandler.handleSelectMode(guardUndef(mode));
+                    demoHandler.handleSelectDemo();
+                });
         },
-        [handleStart]
+        [diaryHandler, demoHandler]
     );
 
     return {
         isStartModalOpen,
         handler: {
-            handleClose,
             handleClick,
         },
     };

@@ -1,0 +1,1 @@
+export { PrismaButton } from "./PrismaButton";

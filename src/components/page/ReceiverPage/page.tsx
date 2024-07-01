@@ -9,8 +9,6 @@ import { useReceiveService } from "@/usecase";
 
 import { useReceiver } from "./hooks";
 
-import { wrapper } from "./page.css";
-
 export const ReceiverPage = () => {
     const params = useParams();
     const id = parseInt(params.id[0], 10) as ReceiverId;
@@ -39,7 +37,7 @@ export const ReceiverPage = () => {
     }, [socket, setUpSocket, shutDownSocket]);
 
     return (
-        <div className={wrapper({ id: id })}>
+        <div>
             <div>{receivedText}</div>
         </div>
     );
