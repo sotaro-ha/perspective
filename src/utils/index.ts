@@ -1,5 +1,5 @@
 export * from "./consts";
 export { getBaseUrl } from "./getBaseUrl";
 export { getSocketUrl } from "./getSocketUrl";
-export { guardAllUndef, guardUndef } from "./guardUndef";
+export { guardRecursiveUndef, guardUndef } from "./guardUndef";
 export * from "./result";
