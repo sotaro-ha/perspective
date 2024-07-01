@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 "use client";
-import { Button, Group, Modal, Text, Tooltip } from "@mantine/core";
+import { Group } from "@mantine/core";
 import { IconPencil, IconVideo } from "@tabler/icons-react";
 import React, { FC } from "react";
 
@@ -8,7 +8,7 @@ import { ExperienceMode, experienceDataList } from "@/models";
 
 import { useStartModal } from "./hooks";
 
-import { buttonLabelStyle, buttonRootStyle } from "./StartModal.css";
+import { PrismaButton, SelectModal } from "@/components/shared";
 
 interface StartModalProps {}
 
@@ -23,38 +23,23 @@ export const StartModal: FC<StartModalProps> = ({}) => {
     };
 
     return (
-        <Modal
-            opened={isStartModalOpen}
-            onClose={() => {}}
-            size="lg"
-            title="体験を始めます"
-            centered
-            withCloseButton={false}
+        <SelectModal
+            isOpen={isStartModalOpen}
+            mainText="体験を始めます"
+            subText="体験を開始する方法を選んでください．自分で書く前にデモを確認することもできます．"
         >
-            <Text>
-                体験を開始する方法を選んでください．自分で書く前にでもを確認することもできます．
-            </Text>
             <Group mt="4rem" style={{ display: "flex", justifyContent: "center" }}>
                 {experienceDataList.map((experienceData) => {
-                    const IconComponent = iconMap[experienceData.mode];
                     return (
-                        <Tooltip
+                        <PrismaButton
                             label={`${experienceData.label}を開始する`}
                             key={experienceData.mode}
-                        >
-                            <Button
-                                onClick={() => handleClick(experienceData.mode)}
-                                classNames={{
-                                    root: buttonRootStyle,
-                                    label: buttonLabelStyle,
-                                }}
-                            >
-                                <IconComponent />
-                            </Button>
-                        </Tooltip>
+                            onClick={() => handleClick(experienceData.mode)}
+                            IconComponent={iconMap[experienceData.mode]}
+                        />
                     );
                 })}
             </Group>
-        </Modal>
+        </SelectModal>
     );
 };
